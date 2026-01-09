@@ -1,0 +1,830 @@
+/* 1. DESIGN TOKENS (Variables) */
+:root {
+    --gray-100: #F7F7F8;
+    --gray-200: #ECEDEF;
+    --text-main: #111111;
+    --text-sub: #595959;
+    --text-cta: #343434;
+    --border: #E5E7EB;
+    --white: #FFFFFF;
+    --success: #10B981;
+    --error: #EF4444;
+    --gray-subtle: #9CA3AF;
+    --gray-divider: #F3F4F6;
+    --mono: 'Courier New', Courier, monospace;
+    --radius-main: 5px;
+    --radius-small: 3px;
+    --text-body-sm: 14px;
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --nav-height: 64px;
+    --gap-h: 48px;
+    scroll-behavior: smooth;
+}
+
+/* 2. GLOBAL RESETS & BASE */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--white);
+    color: var(--text-main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    width: 100%;
+}
+
+body.overlay-open {
+    overflow: hidden;
+    position: fixed; /* Crucial for iOS */
+    width: 100%;     /* Prevents the page from shrinking */
+    height: 100%;
+    touch-action: none;
+    overscroll-behavior: none;
+}
+
+@supports selector(:focus-visible) {
+button:focus { outline: none; }
+}
+
+strong {
+    font-weight: var(--weight-medium);
+}
+.section-rule {
+    border: none;
+    border-top: 1px solid var(--border);
+}
+
+#readme-overlay {
+    z-index: 500; 
+}
+
+#audit-overlay {
+    z-index: 9999; 
+}
+
+#success-overlay {
+    z-index: 9999;
+}
+
+/* 3. TYPOGRAPHY SYSTEM */
+.heading-xl { font-size: 48px; font-weight: 500; line-height: 1.15; margin-bottom: 24px; }
+.heading-lg { font-size: 32px; font-weight: 500; margin-bottom: 16px; }
+.heading-md { font-size: 20px; font-weight: 500; margin-bottom: 2rem; line-height: 1.4; }
+.heading-sm { font-size: 16px; font-weight: 500; margin-bottom: 12px; }
+
+.label-caps { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray-subtle); margin-bottom: 1.5rem; display: block; }
+
+.text-body-lg { font-size: 20px; color: var(--text-sub); max-width: 720px; margin: 0 auto 40px; }
+.text-body-md { font-size: 18px; color: var(--text-sub); }
+.text-body-sm { font-size: 14px; color: var(--text-main); font-weight: var(--weight-regular);}
+.text-mono { font-family: var(--mono); font-size: 12px; }
+
+.phase-num { font-family: var(--mono); font-size: 12px; color: var(--gray-subtle); margin-bottom: 8px; display: block; }
+.caption { margin-top: 40px; color: var(--gray-subtle); }
+
+/* 4. LAYOUT CORE */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+.section-padding { padding: 100px 0; border-bottom: 1px solid var(--border); }
+.section-header { margin-bottom: 40px; }
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+
+.logo-link {
+text-decoration: none;
+color: inherit;
+display: block; /* Ensures the whole area is clickable */
+transition: opacity 0.2s ease;
+}
+.logo-link:focus {
+outline: none;
+}
+.logo-link:focus-visible {
+outline: 2px solid #0AB1FF; /* Using your logo's blue color */
+outline-offset: 4px;
+border-radius: var(--radius-small);
+}
+
+/* 5. COMPONENTS */
+/* Navigation */
+.nav-sticky { 
+    position: sticky; top: 0; 
+    background: rgba(246, 246, 246, 0.8); backdrop-filter: blur(10px); 
+    border-bottom: 1px solid var(--border); height: var(--nav-height); 
+    display: flex; align-items: center;
+    z-index: 1000;
+}
+.nav-container { display: flex; align-items: center; width: 100%; }
+.logo-mark { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
+.logo-type { font-weight: 500; text-transform: uppercase; font-size: 16px; }
+
+.footer {
+    background-color: var(--white);
+    padding: 64px 0 32px 0;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 64px;
+}
+
+.footer-brand {
+    font-size: 20px;
+    font-weight: var(--weight-bold);
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+/* Status Indicator: System Foundation Style */
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 4px 10px;
+    border-radius: 20px; /* Pill shape for modern UI */
+    margin-top: 12px;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--success);
+    border-radius: 50%;
+    display: inline-block;
+    /* Pulsing glow animation to show "live" status */
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.footer-bottom {
+    padding-top: 32px;
+    border-top: 1px solid var(--gray-divider);
+    font-size: 12px;
+    color: var(--gray-subtle);
+}
+
+.legal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.legal-links {
+    display: flex;
+    gap: 24px;
+}
+
+.legal-links a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.overlay {
+    display: none; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    overscroll-behavior: none;
+    z-index: 2000;
+}
+
+.overlay-label { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray-subtle); display: block; }
+
+.overlay-content {
+    margin: 40px auto 40px; /* Top margin (80px) accounts for the height of your sticky nav */
+    width: 90%;
+    max-width: 800px;
+    background: var(--gray-100);
+    border-radius: var(--radius-main);
+    max-height: calc(100dvh - 80px); /* Ensures it doesn't overflow the viewport */
+    display: flex;
+    flex-direction: column;
+}
+
+.overlay-header {
+    padding: 12px 20px;
+    background: var(--gray-100);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #888;
+    border-radius: var(--radius-main);
+}
+
+.overlay-body {
+    padding: 32px;
+    overflow-y: auto;
+    line-height: 1.6;
+}
+
+.readme-text {
+    white-space: pre-wrap;
+    font-family: 'Courier New', monospace;
+    font-size: var(--text-body-sm);
+}
+
+.overlay-footer {
+    padding: 20px;
+    background: var(--gray-100);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    border-radius: var(--radius-main);
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+}
+
+.close-btn {
+    height: 44px;
+    width: 44px;
+    background: none;
+    border: none;
+    color: var(--text-main);
+    font-size: 32px;
+    cursor: pointer;
+}
+
+.close-btn:hover { color: #434343; }
+
+
+body.overlay-open main#main {
+    pointer-events: none;
+    user-select: none;
+}
+
+.overlay-content[role="dialog"] { outline: none; }
+
+/* Universal Panel & Code */
+.u-panel { display: flex; flex-direction: column; height: 100%; background: #FFFFFF; padding: 32px; border: 1px solid var(--border); border-radius: var(--radius-main); }
+.u-panel pre { background:#0f1620; color:#fff; padding:32px; border-radius: var(--radius-small); overflow:auto; }
+
+.hero-section .btn-primary {
+    height: 48px;     /* Increased from 32px */
+    padding: 0 32px;      /* Increased horizontal padding */
+    font-size: 14px;      /* Slightly larger font */
+    line-height: 16px;
+}
+
+/* Buttons */
+.btn-primary {
+    border: none;
+    appearance: none;
+    height: 32px; padding: 0 16px; display: inline-flex; align-items: center; justify-content: center;
+    background: var(--text-main); color: white;
+    font-size: 12px; line-height: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em;
+    text-decoration: none;
+    border-radius: var(--radius-main); cursor: pointer; transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.btn-primary:hover { background: #434343; }
+.btn-secondary {
+    appearance: none;
+    height: 32px; padding: 0 16px; display: inline-flex; align-items: center; justify-content: center;
+    background: transparent; color: var(--text-main); text-decoration: none; border: 1px solid var(--text-main);
+    font-size: 12px; line-height: 14px; text-transform: uppercase; letter-spacing: 0.1em;
+    font-weight: 500; border-radius: var(--radius-main); cursor: pointer; transition: background-color 0.2s, color 0.2s;
+}
+.btn-secondary:hover { background: #dedede; }
+
+/* 1. Global Reset: Remove default outlines for a clean start */
+.btn-primary:focus,
+.btn-secondary:focus,
+.nav-link:focus,
+.text-link:focus {
+    outline: none;
+}
+
+/* 2. Professional Focus Ring: Only triggered by keyboard (Tab) */
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.nav-link:focus-visible,
+.text-link:focus-visible,
+.close-btn:focus-visible {
+    outline: 2px solid #0AB1FF;
+    outline-offset: 4px;
+    border-radius: var(--radius-small);
+}
+.skip-link {
+    position: absolute;
+    left: -999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    z-index: 9999;
+}
+.skip-link:focus {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: auto;
+    height: auto;
+    background: #0AB1FF; /* Unitary Blue */
+    color: white;
+    padding: 12px 20px;
+    z-index: 10000;
+    text-decoration: none;
+    border-radius: var(--radius-main);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Lists */
+.u-list { list-style: none; padding: 0; margin: 0; }
+.u-list li { align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--gray-divider); font-size: var(--text-body-sm); color: var(--text-main); }
+.u-list li:last-child { border-bottom: none; }
+.u-list--compact li { list-style: none; align-items: flex-start; gap: 12px; padding: 4px 0; border-bottom: none; font-size: var(--text-body-sm); color: var(--text-main); }
+
+/* Matrix Table */
+.matrix-table { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-main); overflow: hidden; }
+.matrix-row { background: #FFF; padding: 32px; display: grid; align-items: center; text-align: left; }
+.matrix-header { background: var(--gray-100); color: var(--gray-subtle); text-transform: uppercase; font-size: 14px; letter-spacing: 0.1em; padding: 16px 32px; }
+
+/* Engagement */
+.engagement-table  { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-main); overflow: hidden; }
+.engagement-row{ background: #FFF; padding: 32px; display: grid; align-items: center; text-align: left; grid-template-columns: 1fr 1fr; gap: 4rem; }
+
+/* Column Type Modifiers */
+.cols-3 { grid-template-columns: 1fr 1fr 1fr; gap: 2rem; }
+
+/* Hero & Section Specific UI */
+.hero-section { text-align: center; min-height: calc(100vh - var(--nav-height)); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 2rem; }
+.text-link { font-size: 14px; color: var(--text-main); text-decoration: none; }
+.text-link:hover { text-decoration: underline; }
+
+.link-file {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.link-file::before {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-color: currentColor;
+    
+    /* Using your Material Design SVG path */
+    -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M264.62-120q-27.62 0-46.12-18.5Q200-157 200-184.62v-590.76q0-27.62 18.5-46.12Q237-840 264.62-840h324.61L760-669.23v484.61q0 27.62-18.5 46.12Q723-120 695.38-120H264.62Zm0-40h430.76q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-464.61H569.23V-800H264.62q-9.24 0-16.93 7.69-7.69 7.69-7.69 16.93v590.76q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69ZM480-231.54q54.69 0 91.96-40.08 37.27-40.07 37.27-96.07v-183.08h-40v183.08q0 39.15-25.69 67.65-25.69 28.5-63.54 28.5-37.62 0-63.42-28.5-25.81-28.5-25.81-67.65v-218.46q0-15.93 9.85-27.58 9.84-11.65 24.76-11.65 15.16 0 24.89 11.65t9.73 27.58v218.46h40v-218.46q0-32-21.31-55.62-21.31-23.61-53.31-23.61t-53.3 23.61q-21.31 23.62-21.31 55.62v218.46q0 56 37.38 96.07 37.39 40.08 91.85 40.08ZM240-800v150.77V-800v640-640Z"/></svg>');
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M264.62-120q-27.62 0-46.12-18.5Q200-157 200-184.62v-590.76q0-27.62 18.5-46.12Q237-840 264.62-840h324.61L760-669.23v484.61q0 27.62-18.5 46.12Q723-120 695.38-120H264.62Zm0-40h430.76q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-464.61H569.23V-800H264.62q-9.24 0-16.93 7.69-7.69 7.69-7.69 16.93v590.76q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69ZM480-231.54q54.69 0 91.96-40.08 37.27-40.07 37.27-96.07v-183.08h-40v183.08q0 39.15-25.69 67.65-25.69 28.5-63.54 28.5-37.62 0-63.42-28.5-25.81-28.5-25.81-67.65v-218.46q0-15.93 9.85-27.58 9.84-11.65 24.76-11.65 15.16 0 24.89 11.65t9.73 27.58v218.46h40v-218.46q0-32-21.31-55.62-21.31-23.61-53.31-23.61t-53.3 23.61q-21.31 23.62-21.31 55.62v218.46q0 56 37.38 96.07 37.39 40.08 91.85 40.08ZM240-800v150.77V-800v640-640Z"/></svg>');
+    
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    
+    flex-shrink: 0;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.link-file:hover::before {
+    opacity: 1;
+}
+
+.anatomy-section { background: #FFF; }
+.anatomy-stack { max-width: 640px; margin: 80px auto; display: flex; flex-direction: column; }
+.anatomy-box { width: 100%; border: 1px solid var(--border); padding: 16px; text-transform: uppercase; letter-spacing: 0.15em; background: #FFF; text-align: center; font-size: 12px; border-radius: var(--radius-main); }
+.anatomy-connector { width: 1px; height: 48px; background: var(--border); margin: 0 auto; }
+
+.sequential-container { display: flex; flex-direction: column; gap: 0; }
+.sequential-step { background: #FFF; padding: 32px; display: grid; grid-template-columns: 320px 1fr; gap: 4rem; align-items: center; border-radius: var(--radius-main); border: 1px solid var(--border); }
+.sequential-divider { height: var(--gap-h); }
+.arrow-indicator { display: flex; justify-content: center; padding: 12px 0; color: var(--gray-subtle); font-size: 20px; line-height: 24px; background: transparent; }
+
+.deliverables-container { display: flex; flex-direction: column; background: #FFF; padding: 32px; gap: 32px; border-radius: var(--radius-main); border: 1px solid var(--border); }
+.deliverable-item { display:block; gap:6px; }
+.deliverable-meta { display:block; gap:8px; color:var(--text-sub); margin-top:8px; }
+
+.branch-column { width: 120px; display: flex; flex-direction: column; align-items: center; }
+
+.source-diagram { display: flex; flex-direction: column; align-items: center; margin: 60px 0; }
+.source-box { border: 1px solid var(--border); padding: 20px 40px; background: #FFF; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; border-radius: var(--radius-main); }
+.source-line-v { height: 60px; width: 1px; background: var(--border); position: relative; }
+.source-line-h { position: absolute; width: 300px; bottom: 0; left: 50%; transform: translateX(-50%); height: 1px; background: var(--border); }
+.source-branches { width: 420px; display: flex; justify-content: space-between; }
+.source-branch-line { height: 40px; width: 1px; background: var(--border); margin: 0 auto; }
+
+.phase-header-v { border-bottom: 1px solid var(--gray-divider); padding-bottom: 24px; }
+.visual-box { background: #F9FAFB; border: 1px solid var(--border); padding: 24px; display: flex; flex-direction: column; gap: 8px; border-radius: var(--radius-small); }
+.label { font-size: var(--text-body-sm); font-weight: 700; text-transform: uppercase; color: var(--text-main); margin-bottom: 16px; display: block; }
+.label-compact { font-size: var(--text-body-sm); font-weight: 700; text-transform: uppercase; color: var(--text-main); display: block; }
+.step-insight { margin-top: 24px; font-weight: 500; color: var(--text-main); }
+.price { padding-bottom: 12px; }
+.card-cta { margin-top: auto; padding-top: 1.5rem; display: flex; justify-content: center; }
+
+/* 6. UTILITIES */
+.bg-subtle { background: var(--gray-100); }
+.bg-white { background: var(--white); }
+.mono-success { color: var(--success); }
+.mono-error { color: var(--error); opacity: 0.8; }
+.two-column-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items:start; }
+.three-column-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; align-items: stretch; }
+.token-line code { background: #F3F4F6; padding:6px 8px; border-radius: var(--radius-small); display:inline-block; }
+
+.form-container { max-width: 600px !important; }
+.form-group { margin-bottom: 20px; }
+.form-label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; margin-bottom: 8px; color: var(--text-main); }
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--gray-200);
+    background: var(--gray-100);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 16px;
+}
+/* Hide the footer specifically when the keyboard is detected */
+.keyboard-visible .overlay-footer {
+    display: none; 
+    /* or use opacity: 0; visibility: hidden; if you want to avoid layout jumps */
+}
+
+.form-group input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none; /* For Safari/Chrome */
+    flex-shrink: 0;
+    /* 2. Define the new look */
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--text-sub);
+    border-radius: 50%; /* Keep it circular */
+    background: var(--white);
+    cursor: pointer;
+    margin: 0 4px;
+    display: inline-grid;
+    place-content: center; /* Centers the inner dot */
+    transition: border-color 0.2s;
+}
+
+/* 3. Style the "Checked" border */
+.form-group input[type="radio"]:checked { border-color: var(--text-sub); }
+
+/* 4. Create the inner dot using a pseudo-element */
+.form-group input[type="radio"]::before {
+content: "";
+width: 8px;
+height: 8px;
+border-radius: 50%;
+transform: scale(0);
+transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+background-color: var(--text-main);
+}
+
+/* 5. Show the dot when checked */
+.form-group input[type="radio"]:checked::before { transform: scale(1); }
+
+/* 6. Hover state for a premium feel */
+.form-group input[type="radio"]:hover { border-color: var(--gray-subtle); }
+
+/* 1. Reset and define the box */
+.form-group input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--text-sub);
+    border-radius: var(--radius-small); /* Sharper corners for checkboxes (3px) */
+    background: var(--white);
+    cursor: pointer;
+
+    /* Center the checkmark */
+    display: inline-grid;
+    place-content: center;
+    margin: 0 4px;
+    transition: all 0.2s ease;
+}
+
+/* 2. Hover state */
+.form-group input[type="checkbox"]:hover { border-color: var(--gray-subtle); }
+
+/* 3. Checked State (Background fills) */
+.form-group input[type="checkbox"]:checked {
+background-color: var(--text-main);
+border-color: var(--text-main);
+}
+
+/* 4. The Checkmark Icon */
+/* We create a simple L-shape using CSS borders to avoid loading an SVG */
+.form-group input[type="checkbox"]::before {
+    content: "";
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0; /* Creates the "L" shape */
+    transform: rotate(45deg) scale(0); /* Hidden initially */
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-top: -2px; /* Slight optical adjustment */
+}
+
+/* 5. Show the checkmark when checked */
+.form-group input[type="checkbox"]:checked::before {
+transform: rotate(45deg) scale(1);
+}
+
+.helper-text { display: block; font-size: 11px; color: var(--text-sub); margin-top: 4px; margin-left: 24px; line-height: 1.4; }
+.radio-group { display: flex; gap: 16px; margin-top: 8px; }
+.radio-label, .checkbox-label { font-size: var(--text-body-sm); font-weight: var(--weight-regular); display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 4px; }
+.gatekeeper-box { background: var(--white); padding: 12px; margin-top: 8px; border-radius: var(--radius-small);}
+.gatekeeper-text { font-size: 11px; margin-top: 8px; color: var(--text-main); }
+.validation-warning { background: #fff3cd; color: #856404; padding: 8px; font-size: 11px; border-radius: 4px; margin-top: 8px; }
+
+.required-star {
+    color: var(--error);
+    margin-left: 2px;
+    font-weight: bold;
+}
+
+/* Ensure labels remain clean */
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.form-group select {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 100%;
+    padding: 10px 35px 10px 10px; /* Extra padding on right for the arrow */
+    background-color: var(--gray-100);
+    border: 1px solid var(--text-sub);
+    border-radius: var(--radius-main);
+
+    font-family: inherit;
+    font-size: var(--text-body-sm);
+    color: var(--text-main);
+    cursor: pointer;
+
+    /* 2. Custom Arrow Icon */
+    /* Using an inline SVG for the arrow so it's sharp and lightweight */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23111111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+    transition: border-color 0.2s;
+}
+
+/* 2. High-contrast Blue Ring ONLY for Keyboard/Tab users */
+.form-group select:focus-visible,.u-input:focus-visible,
+.form-group input[type="radio"]:focus-visible,
+.form-group input[type="checkbox"]:focus-visible {
+    outline: 2px solid #0AB1FF;
+    outline-offset: 2px;
+}
+
+/* 4. Style the dropdown options (Limited styling available) */
+.form-group select option {
+    background: var(--white);
+    color: var(--text-main);
+}
+
+/* Unitary Technical Input Style */
+.u-input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    padding: 12px;
+    background-color: var(--white); /* Uses your existing light gray */
+    border: 1px solid var(--text-sub); /* Subtle border */
+    border-radius: var(--radius-small);
+    font-family: inherit; /* Montserrat */
+    font-size: 16px;
+    color: var(--text-main);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.privacy-note {
+    display: flex;
+    align-items: center;
+    margin-top: 24px;
+    padding: 12px;
+    background-color: rgba(16, 185, 129, 0.05); /* Very subtle green tint */
+    border-radius: var(--radius-small);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-sub);
+    border: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.privacy-note span {
+    line-height: 1.4;
+}
+
+/* MEDIA QUERIES */
+/* Tablet & Smaller Desktops */
+@media (max-width: 1024px) {
+    .heading-xl { font-size: 40px; }
+    .three-column-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Mobile & Tablets (Standard) */
+
+@media (max-width: 768px) {
+.btn-primary,
+.btn-secondary {
+    min-height: 44px; /* Mobile-friendly hit target */
+    padding: 0 24px;
+}
+
+/* Typographic Scaling */
+.heading-xl { font-size: 32px; }
+.heading-lg { font-size: 24px; }
+.text-body-lg { font-size: 18px; }
+
+/* Space Efficiency */
+.section-padding { padding: 60px 0; }
+.container { padding: 0 1.5rem; }
+
+/* Grid Consolidation */
+.two-column-grid, 
+.three-column-grid { 
+    grid-template-columns: 1fr; 
+    gap: 1.5rem; 
+}
+.mobile-hide { display: none; }
+.sequential-step { padding: 32px; display: grid; grid-template-columns: 100%; gap: 1rem; }
+
+.footer-grid {
+    gap: 32px;
+    margin-bottom: 40px;
+}
+
+}
+
+/* Small Mobile (Mathematical Diagram Alignment) */
+@media (max-width: 640px) {
+/* Sync diagram lines to prevent bleeding */
+.source-branches { width: 280px; padding: 0; }
+.source-line-h { width: 160px; }
+
+.nav-sticky { height: 70px; /* Slightly taller for touch targets */ }
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+.engagement-row { padding: 16px; display: block; }
+.cols-3 { gap: 1rem; }
+.matrix-header { font-size: 12px; padding: 8px 16px; }
+.matrix-row { padding: 8px 16px; display: grid; align-items: start; text-align: left; }
+.sequential-step { padding: 16px; }
+.u-panel { padding: 16px; }
+
+.matrix-header { display: none; }
+
+.matrix-table {
+    background: transparent; /* Remove the grid lines */
+    border: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Space between the 4 cards */
+}
+.matrix-row.cols-3 {
+    display: flex;
+    flex-direction: column;
+    background: #FFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-main);
+    padding: 24px;
+    gap: 12px;
+}
+.matrix-row > div:nth-child(1) {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-main);
+    border-bottom: 1px solid var(--gray-divider);
+    padding-bottom: 12px;
+    margin-bottom: 4px;
+}
+.matrix-row > div:nth-child(2):before {
+    content: "EXPECTATION";
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gray-subtle);
+    margin-bottom: 4px;
+}
+.matrix-row > div:nth-child(3):before {
+    content: "REALITY";
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--error); /* Highlighting the problem */
+    margin-bottom: 4px;
+}
+.overlay-header {
+    padding: 8px 16px;
+}
+
+.overlay-content {
+        /* Reset any margins/max-heights from desktop */
+        margin: 0 !important;
+        max-height: none !important;
+        
+        /* Force full visible height minus the header/footer */
+        /* We use the variable we'll set in JS for keyboard safety */
+        height: var(--visual-height, 100dvh);
+        border-radius: 0;
+        width: 100vw;
+        position: relative;
+        overflow-y: auto;
+        
+        /* Critical for Axinite: Smooth momentum scrolling on iOS */
+        -webkit-overflow-scrolling: touch; 
+        
+        /* Prevent background bleed at the edges */
+        background: var(--gray-100); 
+        
+        /* Add padding for the bottom safe area (home indicator) */
+        padding-bottom: env(safe-area-inset-bottom, 24px);
+    }
+
+    /* Deterministically hide footer when keyboard is active */
+    body.keyboard-visible .overlay-footer {
+        display: none;
+    }
+.overlay-footer {
+    padding: 8px 16px;
+}
+
+.overlay-content {
+    margin: 32px auto 0px;
+}
+
+.footer {
+        padding: 48px 0 32px;
+    }
+
+    .footer-grid {
+        /* Stack the 3 columns */
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+        margin-bottom: 48px;
+    }
+
+    .footer-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centers the logo, badge, and links */
+    }
+
+    .status-indicator {
+        justify-content: center;
+        width: fit-content;
+    }
+
+    .footer-links {
+        padding: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 16px; /* Slightly larger tap targets for mobile */
+    }
+
+    .legal-row {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .legal-links {
+        justify-content: center;
+        margin-top: 8px;
+    }
+
+}
