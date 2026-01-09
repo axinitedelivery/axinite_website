@@ -61,7 +61,7 @@ strong {
 #success-overlay .overlay-content {
     max-width: 400px;
     text-align: center;
-    max-height: 300px;
+    max-height: 316px;
 }
 
 #success-overlay .overlay-header,
@@ -841,3 +841,4 @@ transform: rotate(45deg) scale(1);
     }
 
 }
+
