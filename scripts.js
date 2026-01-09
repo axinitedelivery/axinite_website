@@ -3,6 +3,10 @@
  * Complete logic for Viewport Sync, Scroll Locking, Modals, and Form Handling.
  */
 
+// Wrap everything in IIFE to prevent global scope pollution while still exposing needed functions
+(function() {
+    'use strict';
+
 const UI_STATE = {
     overlayStack: [],
     previousFocus: null,
@@ -42,7 +46,7 @@ function toggleScrollLock(lock) {
    2. OVERLAY CONTROLLER
 -------------------------------- */
 
-function openOverlay(id, type = null) {
+window.openOverlay = function(id, type = null) {
     const overlay = document.getElementById(id);
     if (!overlay) return;
 
@@ -71,7 +75,7 @@ function openOverlay(id, type = null) {
     (focusable[0] || overlay).focus();
 }
 
-function closeActiveOverlay() {
+window.closeActiveOverlay = function() {
     const activeId = UI_STATE.overlayStack.pop();
     if (activeId) document.getElementById(activeId).style.display = "none";
 
@@ -89,7 +93,7 @@ function closeActiveOverlay() {
  * Validates if the email is a business email
  * Shows warning for free email providers
  */
-function validateBusinessEmail() {
+window.validateBusinessEmail = function() {
     const email = document.getElementById('audit-email');
     const warning = document.getElementById('email-warning');
     const managedCheckbox = document.getElementById('managed-email');
@@ -118,7 +122,7 @@ function validateBusinessEmail() {
 /**
  * Toggles Figma URL requirement based on NDA checkbox
  */
-function toggleFigmaRequirement() {
+window.toggleFigmaRequirement = function() {
     const ndaChecked = document.getElementById('nda-required').checked;
     const figmaUrl = document.getElementById('figma-url');
     const figmaStar = document.getElementById('figma-star');
@@ -144,7 +148,7 @@ function toggleFigmaRequirement() {
 /**
  * Handles audit form submission
  */
-function handleAuditSubmit(event) {
+window.handleAuditSubmit = function(event) {
     event.preventDefault();
     
     const form = event.target;
@@ -403,3 +407,5 @@ document.addEventListener('DOMContentLoaded', () => {
         trapFocus(overlay);
     });
 });
+
+})(); // End of IIFE
