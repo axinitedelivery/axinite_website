@@ -117,8 +117,8 @@ document.addEventListener('submit', (e) => {
             
             const ndaChecked = document.getElementById("nda-required").checked;
             const msg = ndaChecked 
-                ? "NDA request received. Check email for steps." 
-                : "Audit scheduled. Expect delivery in 48h.";
+                ? "NDA request received. Check your email for execution steps." 
+                : "Audit scheduled. Expect delivery within 48 business hours.";
 
             const msgNode = document.getElementById('success-message');
             if (msgNode) msgNode.textContent = msg;
