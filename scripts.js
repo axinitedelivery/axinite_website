@@ -18,6 +18,22 @@
      Scroll Lock (No Jump)
   -------------------------------- */
 
+let backdrop = null;
+
+function showBackdrop() {
+    if (backdrop) return;
+    backdrop = document.createElement('div');
+    backdrop.className = 'overlay-backdrop';
+    document.body.appendChild(backdrop);
+}
+
+function hideBackdrop() {
+    if (!backdrop) return;
+    backdrop.remove();
+    backdrop = null;
+}
+
+
   function lockScroll() {
     if (UI_STATE.scrollLocked) return;
 
@@ -246,6 +262,14 @@ if (UI_STATE.overlayStack.length === 0) {
     UI_STATE.previousFocus = document.activeElement;
     lockScroll();
     setMainInteractivity(false);
+    showBackdrop();
+}
+
+if (UI_STATE.overlayStack.length === 0) {
+    unlockScroll();
+    setMainInteractivity(true);
+    hideBackdrop();
+    if (UI_STATE.previousFocus) UI_STATE.previousFocus.focus();
 }
 
     // Content injection for README / Scope
