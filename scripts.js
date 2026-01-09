@@ -111,6 +111,25 @@ function unlockScroll() {
         }
     };
 
+    window.toggleFigmaRequirement = function () {
+    const ndaChecked = document.getElementById("nda-required").checked;
+    const figmaInput = document.getElementById("figma-url");
+    const figmaStar = document.getElementById("figma-star");
+
+    // If NDA is required → Figma URL becomes optional
+    figmaInput.required = !ndaChecked;
+
+    // Hide/show required asterisk if it exists
+    if (figmaStar) {
+        figmaStar.style.display = ndaChecked ? "none" : "inline";
+    }
+
+    // Update placeholder for clarity
+    figmaInput.placeholder = ndaChecked
+        ? "Optional until NDA is signed"
+        : "https://www.figma.com/file/xxxx";
+    }
+
     /* -----------------------------
        GLOBAL INTERACTIONS
     -------------------------------- */
