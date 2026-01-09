@@ -1,136 +1,146 @@
 /**
- * AXINITE SYSTEM | UI Infrastructure Controller v1.6
- * Consolidated Viewport Engine & Self-Healing Overlay Stack
+ * AXINITE SYSTEM | UI Infrastructure Controller v2.0
+ * Single-overlay, deterministic scroll locking,
+ * mobile keyboard–safe via Visual Viewport API.
  */
-(function() {
+
+(function () {
     'use strict';
 
+    /* -----------------------------
+       STATE (Single Source of Truth)
+    -------------------------------- */
+
     const UI_STATE = {
-        overlayStack: [],
+        activeOverlay: null,
         previousFocus: null
     };
 
     const body = document.body;
 
     /* -----------------------------
-       1. CONSOLIDATED SYNC ENGINE
+       SCROLL LOCK (No Jump)
     -------------------------------- */
 
-    /**
-     * The single source of truth for viewport positioning.
-     * Prevents the "jump" when moving between input fields.
-     */
-    function performGlobalSync() {
-        if (!window.visualViewport || UI_STATE.overlayStack.length === 0) return;
+    function lockScroll() {
+        const scrollbarWidth =
+            window.innerWidth - document.documentElement.clientWidth;
 
-        const vv = window.visualViewport;
-        const activeId = UI_STATE.overlayStack[UI_STATE.overlayStack.length - 1];
-        const overlay = document.getElementById(activeId);
-        
-        if (!overlay) return;
+        body.style.paddingRight = `${scrollbarWidth}px`;
+        body.style.overflow = 'hidden';
+    }
 
-        // 1. Unified Keyboard Detection
-        const isKeyboardUp = (window.innerHeight - vv.height) > 150;
-        body.classList.toggle('keyboard-visible', isKeyboardUp);
-
-        // 2. Anti-Leak Positioning
-        // Forces the overlay to follow the user's eyes as the browser shifts
-        overlay.style.top = `${vv.offsetTop}px`;
-        overlay.style.height = `${vv.height}px`;
-        
-        // 3. CSS Variable Injection
-        // Ensures content area resizes correctly for every form in the stack
-        overlay.style.setProperty('--visual-height', `${vv.height}px`);
-        
-        const content = overlay.querySelector('.overlay-content') || overlay.querySelector('.overlay-body');
-        if (content) {
-            content.style.setProperty('--visual-height', `${vv.height}px`);
-        }
+    function unlockScroll() {
+        body.style.removeProperty('padding-right');
+        body.style.removeProperty('overflow');
     }
 
     /* -----------------------------
-       2. OVERLAY CONTROLLER
+       VIEWPORT SYNC (Mobile Keyboard)
     -------------------------------- */
 
-    window.openOverlay = function(id, type = null) {
+    function syncOverlayToViewport() {
+        if (!window.visualViewport || !UI_STATE.activeOverlay) return;
+
+        const vv = window.visualViewport;
+        const overlay = document.getElementById(UI_STATE.activeOverlay);
+        if (!overlay) return;
+
+        overlay.style.top = `${vv.offsetTop}px`;
+        overlay.style.height = `${vv.height}px`;
+    }
+
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', syncOverlayToViewport);
+        window.visualViewport.addEventListener('scroll', syncOverlayToViewport);
+    }
+
+    /* -----------------------------
+       OVERLAY CONTROLLER
+    -------------------------------- */
+
+    window.openOverlay = function (id, type = null) {
         const overlay = document.getElementById(id);
         if (!overlay) return;
 
-        if (UI_STATE.overlayStack.length === 0) {
-            UI_STATE.previousFocus = document.activeElement;
-            // Lock background natively (Deterministic Lock v1.2)
-            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-            body.style.paddingRight = `${scrollbarWidth}px`;
-            body.style.overflow = 'hidden';
+        // Close existing overlay if one is open
+        if (UI_STATE.activeOverlay) {
+            closeActiveOverlay();
         }
 
-        // Dynamic Content Injection
-        if (id === "readme-overlay" && type) {
-            const source = document.getElementById(type === "readme" ? "readme-content" : "scope-content");
+        UI_STATE.previousFocus = document.activeElement;
+        UI_STATE.activeOverlay = id;
+
+        // Optional dynamic content injection
+        if (id === 'readme-overlay' && type) {
+            const source = document.getElementById(
+                type === 'readme' ? 'readme-content' : 'scope-content'
+            );
             if (source) {
-                overlay.querySelector(".overlay-header span").textContent = 
-                    type === "readme" ? "integration readme" : "Delivery Scope & Commercial Terms";
-                overlay.querySelector(".overlay-body pre").textContent = source.textContent.trim();
+                overlay.querySelector('.overlay-header span').textContent =
+                    type === 'readme'
+                        ? 'integration readme'
+                        : 'Delivery Scope & Commercial Terms';
+
+                overlay.querySelector('.overlay-body pre').textContent =
+                    source.textContent.trim();
             }
         }
 
-        UI_STATE.overlayStack.push(id);
-        overlay.style.display = "flex";
-        overlay.style.zIndex = 1000 + UI_STATE.overlayStack.length;
+        overlay.style.display = 'flex';
+        overlay.style.zIndex = 1000;
 
-        // Force an immediate sync so the second form is positioned correctly
-        performGlobalSync();
-        
-        // Focus management
-        const focusable = overlay.querySelectorAll('a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])');
-        if (focusable.length > 0) {
-            setTimeout(() => focusable[0].focus(), 50);
-        }
+        lockScroll();
+        syncOverlayToViewport();
+
+        // Focus first interactive element
+        const focusable = overlay.querySelector(
+            'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])'
+        );
+        (focusable || overlay).focus();
     };
 
-    window.closeActiveOverlay = function() {
-        if (UI_STATE.overlayStack.length === 0) return;
+    window.closeActiveOverlay = function () {
+        if (!UI_STATE.activeOverlay) return;
 
-        const activeId = UI_STATE.overlayStack.pop();
-        const overlay = document.getElementById(activeId);
-        if (overlay) overlay.style.display = "none";
+        const overlay = document.getElementById(UI_STATE.activeOverlay);
+        if (overlay) overlay.style.display = 'none';
 
-        if (UI_STATE.overlayStack.length === 0) {
-            body.style.removeProperty('padding-right');
-            body.style.removeProperty('overflow');
-            if (UI_STATE.previousFocus) UI_STATE.previousFocus.focus();
-        } else {
-            // Re-sync to the previous overlay in the stack
-            performGlobalSync();
+        UI_STATE.activeOverlay = null;
+        unlockScroll();
+
+        if (UI_STATE.previousFocus) {
+            UI_STATE.previousFocus.focus();
         }
     };
 
     /* -----------------------------
-       3. GLOBAL LISTENERS
+       GLOBAL INTERACTIONS
     -------------------------------- */
 
-    if (window.visualViewport) {
-        // Only one set of listeners to prevent race conditions
-        window.visualViewport.addEventListener('resize', performGlobalSync);
-        window.visualViewport.addEventListener('scroll', performGlobalSync);
-    }
-
-    window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") window.closeActiveOverlay();
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeActiveOverlay();
     });
 
-    window.addEventListener("click", (e) => {
-        if (e.target.classList.contains('overlay')) window.closeActiveOverlay();
-    });
+    document.addEventListener('click', (e) => {
+        // Backdrop click
+        if (e.target.classList.contains('overlay')) {
+            closeActiveOverlay();
+        }
 
-    // Handle Audit Form specifically
-    window.handleAuditSubmit = function(event) {
-        event.preventDefault();
-        window.closeActiveOverlay(); 
-        setTimeout(() => {
-            window.openOverlay("success-overlay");
-            event.target.reset();
-        }, 100);
-    };
+        // Declarative open
+        const openBtn = e.target.closest('[data-open-overlay]');
+        if (openBtn) {
+            openOverlay(
+                openBtn.dataset.openOverlay,
+                openBtn.dataset.overlayType
+            );
+        }
+
+        // Declarative close
+        if (e.target.closest('[data-close-overlay]')) {
+            closeActiveOverlay();
+        }
+    });
 
 })();
