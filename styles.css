@@ -58,6 +58,26 @@ strong {
     z-index: 9999;
 }
 
+#success-overlay .overlay-content {
+    max-width: 400px;
+    text-align: center;
+    max-height: 300px;
+}
+
+#success-overlay .overlay-header,
+#success-overlay .overlay-footer {
+    justify-content: center;
+}
+
+#success-overlay .overlay-body {
+    padding: 40px 24px;
+}
+
+#success-overlay svg {
+    display: block;
+    margin: 0 auto;
+}
+
 /* 3. TYPOGRAPHY SYSTEM */
 .heading-xl { font-size: 48px; font-weight: 500; line-height: 1.15; margin-bottom: 24px; }
 .heading-lg { font-size: 32px; font-weight: 500; margin-bottom: 16px; }
