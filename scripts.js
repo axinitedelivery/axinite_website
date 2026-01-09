@@ -1,100 +1,78 @@
 /**
  * AXINITE SYSTEM | UI Infrastructure Controller
- * Single-overlay, deterministic, no stacking, no movement
+ * Final Build: Zero-Jump, No-Reflow Logic
  */
 
 (function () {
     'use strict';
 
-    /* -----------------------------
-       STATE (Single Overlay Only)
-    -------------------------------- */
-
     const UI_STATE = {
         activeOverlay: null,
-        previousFocus: null
+        scrollPos: 0
     };
 
     const body = document.body;
+    const html = document.documentElement;
 
     /* -----------------------------
-       SCROLL LOCK (NO JUMP)
+       SCROLL LOCK (RE-ENGINEERED)
     -------------------------------- */
 
-function lockScroll() {
-    // Capture the current scroll position
-    const scrollY = window.scrollY;
+    function lockScroll() {
+        // Capture exact pixel
+        UI_STATE.scrollPos = window.pageYOffset || html.scrollTop;
 
-    body.style.position = 'fixed';
-    body.style.top = `-${scrollY}px`;
-    body.style.width = '100%';
-    // Optional: add overflowY scroll to prevent layout shift from scrollbar disappearing
-    body.style.overflowY = 'scroll'; 
-}
+        // Pin body
+        body.style.position = 'fixed';
+        body.style.top = `-${UI_STATE.scrollPos}px`;
+        body.style.width = '100%';
+        body.style.overflowY = 'scroll'; // Force gutter to stay
+    }
 
-function unlockScroll() {
-    const scrollY = Math.abs(parseInt(body.style.top || '0', 10));
+    function unlockScroll() {
+        // 1. Kill smooth scrolling globally immediately
+        html.style.scrollBehavior = 'auto';
+        body.style.scrollBehavior = 'auto';
 
-    // 1. Force the HTML element to ignore smooth scrolling temporarily
-    document.documentElement.style.scrollBehavior = 'auto';
+        // 2. Remove fixed constraints
+        body.style.removeProperty('position');
+        body.style.removeProperty('top');
+        body.style.removeProperty('width');
+        body.style.removeProperty('overflow-y');
 
-    // 2. Remove the "fixed" lock
-    body.style.removeProperty('position');
-    body.style.removeProperty('top');
-    body.style.removeProperty('width');
-    body.style.removeProperty('overflow-y');
+        // 3. Instant jump
+        window.scrollTo(0, UI_STATE.scrollPos);
 
-    // 3. Jump to the position instantly
-    window.scrollTo(0, scrollY);
+        // 4. Clean up: Wait for the browser to acknowledge the jump before restoring smooth
+        requestAnimationFrame(() => {
+            html.style.removeProperty('scroll-behavior');
+            body.style.removeProperty('scroll-behavior');
+        });
+    }
 
-    // 4. Restore smooth scrolling after the jump (use requestAnimationFrame for safety)
-    requestAnimationFrame(() => {
-        document.documentElement.style.removeProperty('scroll-behavior');
-    });
-}
     /* -----------------------------
        OVERLAY CONTROL
     -------------------------------- */
 
-    window.openOverlay = function (id, type = null) {
+    window.openOverlay = function (id) {
         const overlay = document.getElementById(id);
         if (!overlay) return;
 
-        // Close any existing overlay (hard guarantee)
+        // Force close if something is already open
         if (UI_STATE.activeOverlay) {
-            closeActiveOverlay();
+            const current = document.getElementById(UI_STATE.activeOverlay);
+            if (current) current.style.display = 'none';
+        } else {
+            // Only lock background if this is the first overlay
+            lockScroll();
         }
 
-        UI_STATE.previousFocus = document.activeElement;
         UI_STATE.activeOverlay = id;
-
-        // Optional dynamic content injection
-        if (id === 'readme-overlay' && type) {
-            const source = document.getElementById(
-                type === 'readme' ? 'readme-content' : 'scope-content'
-            );
-            if (source) {
-                overlay.querySelector('.overlay-header span').textContent =
-                    type === 'readme'
-                        ? 'integration readme'
-                        : 'Delivery Scope & Commercial Terms';
-
-                overlay.querySelector('.overlay-body pre').textContent =
-                    source.textContent.trim();
-            }
-        }
-
-        lockScroll();
-
         overlay.style.display = 'flex';
-        overlay.style.zIndex = '1000';
-
-        // Focus first interactive element
-        const focusable = overlay.querySelector(
-            'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])'
-        );
-
-        (focusable || overlay).focus();
+        
+        // Focus management
+        const btn = overlay.querySelector('button');
+        if (btn) setTimeout(() => btn.focus(), 50);
     };
 
     window.closeActiveOverlay = function () {
@@ -105,13 +83,14 @@ function unlockScroll() {
 
         UI_STATE.activeOverlay = null;
         unlockScroll();
-
-        if (UI_STATE.previousFocus) {
-            UI_STATE.previousFocus.focus();
-        }
     };
 
-    window.toggleFigmaRequirement = function () {
+    /* -----------------------------
+       GLOBAL INTERACTIONS
+    -------------------------------- */
+
+
+window.toggleFigmaRequirement = function () {
     const ndaChecked = document.getElementById("nda-required").checked;
     const figmaInput = document.getElementById("figma-url");
     const figmaStar = document.getElementById("figma-star");
@@ -130,35 +109,39 @@ function unlockScroll() {
         : "https://www.figma.com/file/xxxx";
     }
 
-    /* -----------------------------
-       GLOBAL INTERACTIONS
-    -------------------------------- */
 
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeActiveOverlay();
+    // Form Submission
+document.addEventListener('submit', (e) => {
+        if (e.target.id === 'auditForm') {
+            e.preventDefault();
+            
+            const ndaChecked = document.getElementById("nda-required").checked;
+            const msg = ndaChecked 
+                ? "NDA request received. Check email for steps." 
+                : "Audit scheduled. Expect delivery in 48h.";
+
+            const msgNode = document.getElementById('success-message');
+            if (msgNode) msgNode.textContent = msg;
+
+            window.openOverlay('success-overlay');
         }
     });
 
+    // Clicks & Keys
     document.addEventListener('click', (e) => {
-        // Backdrop click
-        if (e.target.classList.contains('overlay')) {
-            closeActiveOverlay();
-        }
-
-        // Declarative open
+        if (e.target.classList.contains('overlay')) closeActiveOverlay();
+        
         const openBtn = e.target.closest('[data-open-overlay]');
         if (openBtn) {
-            openOverlay(
-                openBtn.dataset.openOverlay,
-                openBtn.dataset.overlayType
-            );
+            e.preventDefault(); // Prevents <a href="#"> from jumping
+            window.openOverlay(openBtn.dataset.openOverlay);
         }
 
-        // Declarative close
-        if (e.target.closest('[data-close-overlay]')) {
-            closeActiveOverlay();
-        }
+        if (e.target.closest('[data-close-overlay]')) closeActiveOverlay();
+    });
+
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeActiveOverlay();
     });
 
 })();
