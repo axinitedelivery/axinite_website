@@ -34,15 +34,6 @@ body {
     width: 100%;
 }
 
-body.overlay-open {
-    overflow: hidden;
-    position: fixed; /* Crucial for iOS */
-    width: 100%;     /* Prevents the page from shrinking */
-    height: 100%;
-    touch-action: none;
-    overscroll-behavior: none;
-}
-
 @supports selector(:focus-visible) {
 button:focus { outline: none; }
 }
@@ -455,15 +446,7 @@ body.overlay-open main#main {
 .form-container { max-width: 600px !important; }
 .form-group { margin-bottom: 20px; }
 .form-label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; margin-bottom: 8px; color: var(--text-main); }
-.form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--gray-200);
-    background: var(--gray-100);
-    border-radius: 4px;
-    font-family: inherit;
-    font-size: 16px;
-}
+
 /* Hide the footer specifically when the keyboard is detected */
 .keyboard-visible .overlay-footer {
     display: none; 
@@ -580,7 +563,7 @@ transform: rotate(45deg) scale(1);
     width: 100%;
     padding: 10px 35px 10px 10px; /* Extra padding on right for the arrow */
     background-color: var(--gray-100);
-    border: 1px solid var(--text-sub);
+    border: 1px solid var(--gray-200);
     border-radius: var(--radius-main);
 
     font-family: inherit;
