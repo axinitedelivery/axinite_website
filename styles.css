@@ -697,6 +697,7 @@ transform: rotate(45deg) scale(1);
 
 /* Small Mobile (Mathematical Diagram Alignment) */
 @media (max-width: 640px) {
+
 /* Sync diagram lines to prevent bleeding */
 .source-branches { width: 280px; padding: 0; }
 .source-line-h { width: 160px; }
@@ -798,6 +799,11 @@ transform: rotate(45deg) scale(1);
     margin: 32px auto 0px;
 }
 
+#success-overlay .overlay-content {
+    width: 100%;
+    max-height: 316px;
+}
+
 .footer {
         padding: 48px 0 32px;
     }
@@ -841,4 +847,3 @@ transform: rotate(45deg) scale(1);
     }
 
 }
-
