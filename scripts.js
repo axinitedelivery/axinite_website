@@ -90,21 +90,6 @@ window.openOverlay = async function (id, fileName = null) {
     const target = overlay.querySelector('.readme-text');
     if (fileName && target) {
         target.textContent = "Requesting artifact from system...";
-        try {
-            const response = await fetch(fileName);
-            if (!response.ok) throw new Error();
-            const text = await response.text();
-            
-            target.innerHTML = `
-                <div class="overlay-action-bar">
-                    <span class="file-info">SOURCE: ${fileName}</span>
-                    <a href="${fileName}" download="${fileName}" class="download-link">DOWNLOAD .MD</a>
-                </div>
-                <pre class="md-content">${text.trim()}</pre>
-            `;
-        } catch (err) {
-            target.innerHTML = `<div class="error">404: Artifact Not Found</div>`;
-        }
     }
 
     UI_STATE.activeOverlay = id;
