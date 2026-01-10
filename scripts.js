@@ -91,7 +91,7 @@ window.openOverlay = async function (id, fileName = null) {
             target.innerHTML = `
                 <iframe src="${fileName}" 
                         width="100%" 
-                        height="600px" 
+                        height="100%" 
                         style="border: none; border-radius: var(--radius-small);">
                 </iframe>`;
         }
@@ -202,4 +202,5 @@ window.handleAuditSubmit = function (e) {
     });
 
 })();
+
 
