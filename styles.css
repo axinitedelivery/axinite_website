@@ -294,6 +294,27 @@ border-radius: var(--radius-small);
 
 .close-btn:hover { color: #434343; }
 
+/* Markdown Content Styling */
+.md-content {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-main);
+    white-space: pre-wrap; /* Wraps text so it doesn't overflow horizontally */
+    word-break: break-word;
+    background: var(--gray-100);
+    padding: 20px;
+    border-radius: var(--radius-small);
+    border: 1px solid var(--border);
+}
+
+.error {
+    color: var(--error);
+    font-family: var(--mono);
+    font-weight: bold;
+    text-align: center;
+    padding: 40px;
+}
 
 body.overlay-open main#main {
     pointer-events: none;
