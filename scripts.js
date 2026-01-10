@@ -58,33 +58,52 @@
  * AXINITE SYSTEM | Unified Markdown Controller
  * Handles 4 Files: README, Terms, Privacy, Scope
  */
+
 window.openOverlay = async function (id, fileName = null) {
     const overlay = document.getElementById(id);
     if (!overlay) return;
 
-    // 1. Handle background locking
+    // 1. Label/Title Mapping
+    const labelMap = {
+        'ads-integration-readme.md': 'INTEGRATION README',
+        'ads-commercial-terms.md': 'COMMERCIAL TERMS',
+        'ads-privacy-policy.md': 'PRIVACY POLICY',
+        'ads-terms-of-service.md': 'TERMS OF SERVICE'
+    };
+
+    // 2. Background Lock Logic
     if (UI_STATE.activeOverlay) {
         document.getElementById(UI_STATE.activeOverlay).style.display = 'none';
     } else {
         lockScroll();
     }
 
-    const target = overlay.querySelector('.readme-text');
+    // 3. Update the Header Label
+    const labelNode = overlay.querySelector('.overlay-label');
+    if (labelNode) {
+        // If the filename exists in our map, use the pretty title; 
+        // otherwise, default to 'DOCUMENTATION'
+        labelNode.textContent = labelMap[fileName] || 'DOCUMENTATION';
+    }
 
-    // 2. Fetch and Inject Content
+    // 4. Content Fetching & Injection
+    const target = overlay.querySelector('.readme-text');
     if (fileName && target) {
-        target.textContent = "Accessing encrypted documentation..."; // Themed placeholder
-        
+        target.textContent = "Requesting artifact from system...";
         try {
             const response = await fetch(fileName);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            
+            if (!response.ok) throw new Error();
             const text = await response.text();
             
-            // Inject as pre-formatted text to preserve MD structure
-            target.innerHTML = `<pre class="md-content">${text.trim()}</pre>`;
+            target.innerHTML = `
+                <div class="overlay-action-bar">
+                    <span class="file-info">SOURCE: ${fileName}</span>
+                    <a href="${fileName}" download="${fileName}" class="download-link">DOWNLOAD .MD</a>
+                </div>
+                <pre class="md-content">${text.trim()}</pre>
+            `;
         } catch (err) {
-            target.innerHTML = `<div class="error">System Error: Documentation file [${fileName}] not found.</div>`;
+            target.innerHTML = `<div class="error">404: Artifact Not Found</div>`;
         }
     }
 
@@ -188,4 +207,3 @@ window.handleAuditSubmit = function (e) {
     });
 
 })();
-
