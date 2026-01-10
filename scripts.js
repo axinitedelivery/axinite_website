@@ -55,48 +55,49 @@
     -------------------------------- */
 
 /**
- * UPDATED OVERLAY CONTROLLER
- * Supports fetching external .md files and injecting content
+ * AXINITE POLYMORPHIC OVERLAY CONTROLLER
+ * Handles .md (Injection) and .pdf (Embedding)
  */
 window.openOverlay = async function (id, fileName = null) {
     const overlay = document.getElementById(id);
     if (!overlay) return;
 
-    // 1. Single-Overlay Guarantee: Close existing before opening new
+    // 1. Logic for switching between overlays without unlocking scroll
     if (UI_STATE.activeOverlay) {
-        const current = document.getElementById(UI_STATE.activeOverlay);
-        if (current) current.style.display = 'none';
+        document.getElementById(UI_STATE.activeOverlay).style.display = 'none';
     } else {
-        // Only lock the background if no overlay is currently open
         lockScroll();
     }
 
-    // 2. Specific Logic for "integration-readme.md" Injection
-    // Checks if the ID matches the readme overlay and a filename was provided
-    if (id === 'readme-overlay' && fileName) {
-        const target = overlay.querySelector('.readme-text'); // The <pre> or <div> inside the modal
-        
-        if (target) {
-            target.textContent = "Loading system documentation..."; // UX Placeholder
-            
+    const target = overlay.querySelector('.readme-text');
+
+    // 2. Handle External Files
+    if (fileName && target) {
+        if (fileName.endsWith('.md')) {
+            // MARKDOWN/TEXT PATH
+            target.textContent = "Loading documentation...";
             try {
-                // Fetch the external file
                 const response = await fetch(fileName);
-                
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                
+                if (!response.ok) throw new Error();
                 const text = await response.text();
-                
-                // Inject the text content and trim whitespace
-                target.textContent = text.trim();
-            } catch (error) {
-                console.error("Axinite System Error: Failed to fetch readme.", error);
-                target.textContent = `Error: Could not load the file "${fileName}". Ensure the file exists on the server.`;
+                target.innerHTML = `<pre style="white-space: pre-wrap; font-family: var(--mono);">${text.trim()}</pre>`;
+            } catch (err) {
+                target.textContent = "Error: File not found or unreachable.";
             }
+        } 
+        else if (fileName.endsWith('.pdf')) {
+            // PDF EMBED PATH
+            // We use an iframe because browsers cannot "inject" raw PDF data into text tags
+            target.innerHTML = `
+                <iframe src="${fileName}" 
+                        width="100%" 
+                        height="600px" 
+                        style="border: none; border-radius: var(--radius-small);">
+                </iframe>`;
         }
     }
 
-    // 3. Finalize State and Display
+    // 3. Finalize
     UI_STATE.activeOverlay = id;
     overlay.style.display = 'flex';
 
