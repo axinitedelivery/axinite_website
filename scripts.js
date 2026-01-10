@@ -63,7 +63,7 @@ window.openOverlay = async function (id, fileName = null) {
     const overlay = document.getElementById(id);
     if (!overlay) return;
 
-    // 1. Label/Title Mapping
+    // 1. Label Mapping (Technical file -> Human Title)
     const labelMap = {
         'ads-integration-readme.md': 'INTEGRATION README',
         'ads-commercial-terms.md': 'COMMERCIAL TERMS',
@@ -71,25 +71,40 @@ window.openOverlay = async function (id, fileName = null) {
         'ads-terms-of-service.md': 'TERMS OF SERVICE'
     };
 
-    // 2. Background Lock Logic
+    // 2. Lock scroll and switch views
     if (UI_STATE.activeOverlay) {
         document.getElementById(UI_STATE.activeOverlay).style.display = 'none';
     } else {
         lockScroll();
     }
 
-    // 3. Update the Header Label
+    // 3. Update Header Label
     const labelNode = overlay.querySelector('.overlay-label');
     if (labelNode) {
-        // If the filename exists in our map, use the pretty title; 
-        // otherwise, default to 'DOCUMENTATION'
         labelNode.textContent = labelMap[fileName] || 'DOCUMENTATION';
     }
 
-    // 4. Content Fetching & Injection
+    // 4. UPDATE DOWNLOAD BUTTON (Crucial step)
+    const downloadBtn = overlay.querySelector('.btn-secondary[download]');
+    if (downloadBtn && fileName) {
+        downloadBtn.href = fileName;
+        downloadBtn.setAttribute('download', fileName);
+    }
+
+    // 5. Fetch and Inject Content
     const target = overlay.querySelector('.readme-text');
     if (fileName && target) {
-        target.textContent = "Requesting artifact from system...";
+        target.textContent = "Fetching system artifact...";
+        try {
+            const response = await fetch(fileName);
+            if (!response.ok) throw new Error();
+            const text = await response.text();
+            
+            // Injects text into your <pre class="readme-text">
+            target.textContent = text.trim();
+        } catch (err) {
+            target.textContent = `ERROR 404: [${fileName}] not found in repository.`;
+        }
     }
 
     UI_STATE.activeOverlay = id;
