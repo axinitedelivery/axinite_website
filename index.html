@@ -18,7 +18,6 @@
   <meta property="og:image" content="/assets/og-image.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
   <script src="scripts.js" defer></script>
 </head>
 
@@ -492,7 +491,7 @@
 
 
 <div id="readme-overlay" class="overlay" tabindex="-1" data-focus-zone="overlay">
-    <div class="overlay-content">
+    <div class="overlay-content" role="dialog" aria-modal="true">
         <div class="overlay-header">
             <span class="overlay-label" style="margin-bottom: 0;"></span>
             <button onclick="closeActiveOverlay()" class="close-btn" aria-label="Close">&times;</button>
@@ -618,11 +617,11 @@
 </div>
 
 <div id="success-overlay" class="overlay">
-    <div class="overlay-content" style="max-width: 400px; text-align: center;">
-        <div class="overlay-header" style="justify-content: center;">
+    <div class="overlay-content">
+        <div class="overlay-header">
             <span class="overlay-label">Protocol Initialized</span>
         </div>
-        <div class="overlay-body" style="padding: 40px 24px;">
+        <div class="overlay-body">
             <div style="margin-bottom: 24px;">
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
@@ -631,7 +630,7 @@
             </div>
             <p id="success-message" class="text-body-sm" style="line-height: 1.6;"></p>
         </div>
-        <div class="overlay-footer" style="justify-content: center;">
+        <div class="overlay-footer">
             <button type="button" onclick="closeActiveOverlay()" class="btn-primary">Acknowledge</button>
         </div>
     </div>
