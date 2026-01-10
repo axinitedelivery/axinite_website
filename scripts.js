@@ -55,14 +55,14 @@
     -------------------------------- */
 
 /**
- * AXINITE POLYMORPHIC OVERLAY CONTROLLER
- * Handles .md (Injection) and .pdf (Embedding)
+ * AXINITE SYSTEM | Unified Markdown Controller
+ * Handles 4 Files: README, Terms, Privacy, Scope
  */
 window.openOverlay = async function (id, fileName = null) {
     const overlay = document.getElementById(id);
     if (!overlay) return;
 
-    // 1. Logic for switching between overlays without unlocking scroll
+    // 1. Handle background locking
     if (UI_STATE.activeOverlay) {
         document.getElementById(UI_STATE.activeOverlay).style.display = 'none';
     } else {
@@ -71,39 +71,25 @@ window.openOverlay = async function (id, fileName = null) {
 
     const target = overlay.querySelector('.readme-text');
 
-    // 2. Handle External Files
+    // 2. Fetch and Inject Content
     if (fileName && target) {
-        if (fileName.endsWith('.md')) {
-            // MARKDOWN/TEXT PATH
-            target.textContent = "Loading documentation...";
-            try {
-                const response = await fetch(fileName);
-                if (!response.ok) throw new Error();
-                const text = await response.text();
-                target.innerHTML = `<pre style="white-space: pre-wrap; font-family: var(--mono);">${text.trim()}</pre>`;
-            } catch (err) {
-                target.textContent = "Error: File not found or unreachable.";
-            }
-        } 
-        else if (fileName.endsWith('.pdf')) {
-            // PDF EMBED PATH
-            // We use an iframe because browsers cannot "inject" raw PDF data into text tags
-            target.innerHTML = `
-                <iframe src="${fileName}" 
-                        width="100%" 
-                        height="100%" 
-                        style="border: none; border-radius: var(--radius-small);">
-                </iframe>`;
+        target.textContent = "Accessing encrypted documentation..."; // Themed placeholder
+        
+        try {
+            const response = await fetch(fileName);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            
+            const text = await response.text();
+            
+            // Inject as pre-formatted text to preserve MD structure
+            target.innerHTML = `<pre class="md-content">${text.trim()}</pre>`;
+        } catch (err) {
+            target.innerHTML = `<div class="error">System Error: Documentation file [${fileName}] not found.</div>`;
         }
     }
 
-    // 3. Finalize
     UI_STATE.activeOverlay = id;
     overlay.style.display = 'flex';
-
-    // Focus first button for accessibility
-    const closeBtn = overlay.querySelector('button');
-    if (closeBtn) setTimeout(() => closeBtn.focus(), 50);
 };
 
     window.closeActiveOverlay = function () {
@@ -202,5 +188,4 @@ window.handleAuditSubmit = function (e) {
     });
 
 })();
-
 
