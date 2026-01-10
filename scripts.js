@@ -54,26 +54,56 @@
        OVERLAY CONTROL
     -------------------------------- */
 
-    window.openOverlay = function (id) {
-        const overlay = document.getElementById(id);
-        if (!overlay) return;
+/**
+ * UPDATED OVERLAY CONTROLLER
+ * Supports fetching external .md files and injecting content
+ */
+window.openOverlay = async function (id, fileName = null) {
+    const overlay = document.getElementById(id);
+    if (!overlay) return;
 
-        // Force close if something is already open
-        if (UI_STATE.activeOverlay) {
-            const current = document.getElementById(UI_STATE.activeOverlay);
-            if (current) current.style.display = 'none';
-        } else {
-            // Only lock background if this is the first overlay
-            lockScroll();
-        }
+    // 1. Single-Overlay Guarantee: Close existing before opening new
+    if (UI_STATE.activeOverlay) {
+        const current = document.getElementById(UI_STATE.activeOverlay);
+        if (current) current.style.display = 'none';
+    } else {
+        // Only lock the background if no overlay is currently open
+        lockScroll();
+    }
 
-        UI_STATE.activeOverlay = id;
-        overlay.style.display = 'flex';
+    // 2. Specific Logic for "integration-readme.md" Injection
+    // Checks if the ID matches the readme overlay and a filename was provided
+    if (id === 'readme-overlay' && fileName) {
+        const target = overlay.querySelector('.readme-text'); // The <pre> or <div> inside the modal
         
-        // Focus management
-        const btn = overlay.querySelector('button');
-        if (btn) setTimeout(() => btn.focus(), 50);
-    };
+        if (target) {
+            target.textContent = "Loading system documentation..."; // UX Placeholder
+            
+            try {
+                // Fetch the external file
+                const response = await fetch(fileName);
+                
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const text = await response.text();
+                
+                // Inject the text content and trim whitespace
+                target.textContent = text.trim();
+            } catch (error) {
+                console.error("Axinite System Error: Failed to fetch readme.", error);
+                target.textContent = `Error: Could not load the file "${fileName}". Ensure the file exists on the server.`;
+            }
+        }
+    }
+
+    // 3. Finalize State and Display
+    UI_STATE.activeOverlay = id;
+    overlay.style.display = 'flex';
+
+    // Focus first button for accessibility
+    const closeBtn = overlay.querySelector('button');
+    if (closeBtn) setTimeout(() => closeBtn.focus(), 50);
+};
 
     window.closeActiveOverlay = function () {
         if (!UI_STATE.activeOverlay) return;
@@ -110,22 +140,48 @@ window.toggleFigmaRequirement = function () {
     }
 
 
-    // Form Submission
-document.addEventListener('submit', (e) => {
-        if (e.target.id === 'auditForm') {
-            e.preventDefault();
-            
-            const ndaChecked = document.getElementById("nda-required").checked;
-            const msg = ndaChecked 
-                ? "NDA request received. Check your email for execution steps." 
-                : "Audit scheduled. Expect delivery within 48 business hours.";
+/**
+ * HANDLES AUDIT FORM SUBMISSION
+ * Transition logic from Form -> Success Overlay
+ */
+window.handleAuditSubmit = function (e) {
+    // 1. Prevent the browser from refreshing the page
+    if (e && e.preventDefault) e.preventDefault();
 
-            const msgNode = document.getElementById('success-message');
-            if (msgNode) msgNode.textContent = msg;
+    // 2. Identify the user's intent (NDA vs. Direct Audit)
+    const ndaCheckbox = document.getElementById("nda-required");
+    const isNdaRequested = ndaCheckbox ? ndaCheckbox.checked : false;
 
-            window.openOverlay('success-overlay');
-        }
-    });
+    // 3. Select the appropriate deterministic message
+    const successMsg = isNdaRequested
+        ? "Protocol Initialized: NDA request received. Check your email for execution steps."
+        : "Data Received: Audit scheduled. Expect delivery within 48 business hours.";
+
+    // 4. Inject the message into the success overlay
+    const messageNode = document.getElementById('success-message');
+    if (messageNode) {
+        messageNode.textContent = successMsg;
+    }
+
+    /* 5. TRANSITION LOGIC 
+       We do NOT call unlockScroll() here because we want the background 
+       to stay pinned while we swap the Form for the Success Message.
+    */
+    
+    // Hide the audit form overlay immediately
+    const auditOverlay = document.getElementById('audit-overlay');
+    if (auditOverlay) auditOverlay.style.display = 'none';
+
+    // Open the success overlay
+    // Note: We use window.openOverlay so it sets UI_STATE.activeOverlay correctly
+    window.openOverlay('success-overlay');
+
+    // 6. Final Clean up
+    const form = document.getElementById('auditForm');
+    if (form) form.reset();
+    
+    return false; // Extra safety for legacy browsers
+};
 
     // Clicks & Keys
     document.addEventListener('click', (e) => {
