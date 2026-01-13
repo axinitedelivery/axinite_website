@@ -1,9 +1,6 @@
-AXINITE SYSTEM | INTEGRATION README
+INTEGRATION README
 
 Scope: Foundation Tier (Web / CSS)
-Artifact ID: ADS-RE-001
-Version: 1.1
-Status: DETERMINISTIC ARTIFACT
 
 PURPOSE
 ---------------------------

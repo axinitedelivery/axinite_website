@@ -1,7 +1,5 @@
-AXINITE SYSTEM | ADS TERMS OF SERVICE
+TERMS OF SERVICE
 
-Version: 1.1.1  
-Effective Date: January 2026
 Service: Axinite Design System Infrastructure
 Provider: Miki G. (independent operator)
 

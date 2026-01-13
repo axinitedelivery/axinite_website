@@ -1,10 +1,6 @@
-AXINITE SYSTEM | PRIVACY POLICY
+PRIVACY POLICY
 
 
-
-Version: 1.1.0
-
-Effective Date: January 2026
 
 Service: Axinite Design System Infrastructure
 
@@ -283,6 +279,4 @@ are outside the scope of this policy.
 End of Terms
 
 ADS-RE-001 — Axinite Design System Foundation
-
-
 

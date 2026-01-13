@@ -2,13 +2,11 @@ SYSTEM GOVERNANCE \& COMMERCIAL TERMS
 
 
 
-Version: 1.1.0
-
-Effective Date: January 2026
-
 Service: Axinite Design System Infrastructure
 
 Provider: Miki G. (independent operator)
+
+
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
