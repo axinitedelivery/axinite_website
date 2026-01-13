@@ -1,118 +1,127 @@
-Integration README — Axinite Foundation
+AXINITE SYSTEM | INTEGRATION README
 
-Purpose
-Fast, deterministic instructions for developers to import and validate delivered tokens in a single-platform build. Use this to confirm parity between design and production.
+Scope: Foundation Tier (Web / CSS)
+Artifact ID: ADS-RE-001
+Version: 1.1
+Status: DETERMINISTIC ARTIFACT
 
-1. Delivered artifacts (example)
-
-tokens.json — canonical token source (W3C-like structure)
-
-style-dictionary.config — transform config used to generate outputs
-
-tokens.css or Tokens.swift or Tokens.kt / colors.xml — platform runtime output (one selected)
-
-mapping-dictionary.md — exact Figma style → token mappings
-
-integration-readme.md — this file
-
-reference-components/ — Figma instances + minimal code snippets
-
-2. Prerequisites
-
-Node 16+ (for local transforms / verification) — optional if you only need runtime files
-
-Access to the codebase where tokens will be consumed (branch with CI or a feature branch)
-
-Developer with basic familiarity with the chosen platform (CSS variables, Swift constants, or Kotlin resources)
-
-3. Quick install (Web)
-
-Copy tokens.css into your project’s src/styles/ or import from static hosting.
-
-In your global entry (e.g. index.css or index.js):
-
-@import './styles/tokens.css';
-:root { /* tokens already defined in tokens.css */ }
+PURPOSE
+---------------------------
+This document defines the technical integration procedure for
+the delivered Axinite design tokens. It exists solely to ensure
+correct projection of audited Figma styles into the Web runtime
+via CSS variables.
 
 
-Use variable in components:
+1. DELIVERED ARTIFACTS
+---------------------------
 
-.button { background: var(--color-action-primary); color: var(--color-text-on-action); padding: var(--space-control-md); }
+[ ] ads-tokens.json
+    Canonical token definition (machine-readable)
 
-4. Quick install (iOS — Swift)
+[ ] ads-tokens.css
+    Web runtime projection (CSS custom properties)
 
-Add Tokens.swift to the app module (e.g., Sources/AxiniteTokens/).
+[ ] ads-mapping-dictionary.md  
+    Figma Style → Semantic Token mapping reference
 
-Example usage:
+[ ] ads-integration-readme.md  
+    This document
 
-// Tokens.swift exposes constants, e.g. Tokens.Color.actionPrimary
-let bg = UIColor(hex: Tokens.Color.actionPrimary)
-let padding = CGFloat(Tokens.Spacing.controlMd)
-
-
-Integrate into design system components (SwiftUI or UIKit) via these constants.
-
-5. Quick install (Android — Kotlin)
-
-Add Tokens.kt into a tokens package (e.g., com.company.tokens).
-
-Example usage (Compose):
-
-val ActionPrimary = Color(parseColor(Tokens.Color.ActionPrimary))
-Button(colors = ButtonDefaults.buttonColors(backgroundColor = ActionPrimary)) { ... }
+[ ] ads-usage-snippets.md  
+    Five reference component examples (verification only)
 
 
-(If colors.xml was delivered, add into res/values/colors.xml and reference via resource IDs.)
+2. INTEGRATION (WEB / CSS)
+---------------------------
 
-6. Token mapping example (from mapping-dictionary.md)
-Figma style name	Token identifier	Runtime output
-Primary / Brand / 500	color.brand.500	--color-brand-500: #0A84FF;
-Text / Body / Primary	color.text.primary	--color-text-primary: #0A0A0A;
-Control / Height / MD	space.control.md	--space-control-md: 16px;
+STEP 1  
+Place `ads-tokens.css` into your global styles directory.
 
-Use mapping-dictionary.md as the single source for renaming or lookup. If a value is missing here, it triggers the Quality Gate.
+STEP 2  
+Import the file before any component or layout styles:
 
-7. Token update workflow (recommended)
+@import './styles/ads-tokens.css';
 
-Modify tokens.json (source-of-truth).
+STEP 3  
+Ensure components consume component-level tokens (L4) only:
 
-Run transform (local): npx style-dictionary build --config style-dictionary.config (optional — we can provide CI workflow)
+.btn-primary {
+  background: var(--color-action-primary);
+  padding: var(--button-padding);
+  border-radius: var(--button-radius);
+  color: var(--color-text-on-action);
+}
 
-Commit tokens.json + generated runtime files or publish them via static hosting.
+Direct usage of primitives (L1), semantic tokens (L2),
+or policy tokens (L3) inside components is prohibited.
 
-Open PR: include mapping diff, affected components, and run verification tests.
 
-8. Verification checklist (what you must test)
+3. TOKEN HIERARCHY (INTEGRATION MODEL)
+---------------------------
 
- Runtime tokens compile / parse without syntax errors (CSS parses; Swift/Kotlin source compiles)
+L1 — Primitives  
+Raw numeric values (e.g. spacing units, pixel radii).
 
- Reference components render with tokens only (no hard-coded colors/spacings)
+L2 — Semantic Tokens  
+Named roles derived from primitives.
 
- Visual spot-check: screenshot or run Storybook static build and compare with Figma instances
+L3 — Policy Tokens  
+Active bindings selecting which semantic variant is in force.
 
- Mapping document is included in PR and accepted by design owner
+L4 — Component Tokens  
+Explicit aliases consumed by UI components.
 
-9. Common troubleshooting
+Components must read L4 only.
+L4 is the integration API.
 
-CSS variables not applied → confirm tokens.css is imported before component styles.
 
-Swift constants not recognized → check namespace and Swift access modifiers; ensure file added to correct target.
+4. REFERENCE COMPONENTS
+---------------------------
 
-Android mismatch → confirm whether Tokens.kt or colors.xml was delivered; they are not interchangeable without conversion.
+Reference components provided in Figma and in
+`ads-usage-snippets.md` exist only to verify correct
+token resolution and mapping.
 
-10. Acceptance (what we sign off on)
+They are not a production-ready component library.
 
-We consider tokens accepted when:
 
-Delivered runtime file compiles (or CSS parses) in target environment.
+5. RUNTIME VALIDATION
+---------------------------
 
-Reference components show pixel-parity (within reasonable tolerance) with Figma instances.
+To verify correct runtime resolution:
 
-No open Quality Gate issues exist.
+getComputedStyle(document.documentElement)
+  .getPropertyValue('--button-radius');
 
-11. Contact & support
+Expected output: a resolved numeric value (e.g. `8px`).
 
-Delivery owner: [your-email@example.com
-]
+If values are empty or unresolved, check import order
+and variable name integrity.
 
-Include: project name, platform, token JSON excerpt, and a screenshot of failing vs expected UI.
+
+6. ENVIRONMENT NOTES
+---------------------------
+
+CSS custom properties require modern evergreen browsers.
+
+For legacy or static builds, tokens must be compiled at
+build time using the Client’s tooling.
+
+The Provider does not ship runtime polyfills.
+
+
+7. VERSIONING & UPDATES
+---------------------------
+
+This delivery is static.
+
+Changes to Figma after delivery do not auto-sync.
+
+Any updates to token values, policy bindings, or component
+aliases require a new export or patch as defined by the
+governing agreement.
+
+
+End of Terms
+ADS-RE-001 — Axinite Design System Foundation

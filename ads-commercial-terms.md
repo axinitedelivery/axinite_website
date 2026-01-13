@@ -1,277 +1,214 @@
-Unitary Foundation
-Delivery Scope & Commercial Terms
+SYSTEM GOVERNANCE \& COMMERCIAL TERMS
 
-Version: 1.0
-Last updated: [date]
-Applies to: All Foundation engagements unless explicitly amended in writing
 
-1. What This Document Is
 
-This document defines:
+Version: 1.1.0
 
-What Unitary Foundation delivers
+Effective Date: January 2026
 
-What inputs are required from the client
+Service: Axinite Design System Infrastructure
 
-What is explicitly included and excluded
+Provider: Miki G. (independent operator)
 
-Commercial terms, limits, and acceptance criteria
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-This document is not:
 
-A proposal
 
-A customization offer
+01\. IDENTITY \& ENGAGEMENT MODEL
 
-A consulting agreement
 
-Reading this document does not initiate any work.
 
-2. What Unitary Foundation Is
+Axinite is a productized, fixed-scope design-engineering service operated by Miki G., an independent individual working internationally.
 
-Unitary Foundation is a one-time technical delivery that converts an approved set of design values into a governed token system and platform-specific runtime output.
+By submitting a setup request, checking the consent box, and completing payment, the Client enters into a binding digital agreement (“click-wrap agreement”) governed by these Terms.
 
-It establishes a deterministic design → code handoff for one platform and one theme.
+No handwritten or scanned signature is required.
 
-3. Commercial Summary
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-Price: $3,000 USD (fixed)
 
-Delivery format: One ZIP archive
 
-Timeline: 7–14 calendar days (after inputs are approved)
+02\. SCOPE OF SERVICE (FIXED \& DETERMINISTIC)
 
-Platform: One (Web, iOS, or Android)
 
-Theme: One (e.g. Light)
 
-No subscriptions.
-No retainers.
-No hidden fees outside documented remediation paths.
+The service provides a one-time Design System Foundation setup, including:
 
-4. Required Client Inputs
 
-Work cannot begin until all required inputs are provided.
 
-4.1 Design Source (Required)
+• Exported design tokens (tokens.json)
 
-One of the following:
+• Platform-specific outputs (CSS / Swift / Kotlin, as purchased)
 
-A single approved Figma file
+• Integration README
 
-Equivalent design source clearly representing final intent
+• Up to 5 reference UI components for validation only
 
-The source must represent current desired output, not exploratory work.
 
-4.2 Token Volume Limit
 
-Maximum 120 total token values, counted across all layers combined.
+Explicit exclusions:
 
-This includes:
+• UI/UX redesign or cleanup
 
-Primitive tokens (raw values)
+• Product strategy or visual direction
 
-Semantic tokens (aliases)
+• Ongoing maintenance or consulting
 
-Component appearance tokens
+• Additional platforms, themes, or densities not purchased
 
-Shared structural tokens
 
-If a semantic token references a primitive, both count separately.
 
-Exceeding this limit requires an expanded scope (Tier 2).
+Anything outside this scope requires a separate agreement.
 
-4.3 Reference Components
 
-Five (5) reference components must be agreed before work begins.
 
-These are used only for verification.
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-Each component may include:
 
-Up to 3 states (e.g. Default, Hover, Disabled)
 
-One primary appearance
 
-Variants, themes, or complex behaviors are out of scope.
 
-5. Token Layers Defined
+03\. DATA ACCESS, PRIVACY \& SECURITY
 
-The Foundation scope supports the following layers only:
 
-5.1 Primitive Tokens
 
-Raw, unaliased values
-Examples:
+To ensure a low-friction and secure workflow:
 
-color.brand.500
 
-space.8
 
-font.size.16
+• Access Level: Viewer-only access to Client Figma files
 
-5.2 Semantic Tokens
+• Data Minimization: Only visual system values (colors, spacing, typography, effects) are reviewed
 
-Aliases referencing primitives
-Examples:
+• No Layout Retention: No product layouts or proprietary structures are duplicated or stored
 
-bg.page
+• Zero-Retention Policy: All temporary data and access are revoked within 7 days of final delivery
 
-text.primary
+• No Tracking: No cookies, analytics, pixels, or behavioral tracking are used
 
-5.3 Component Appearance Tokens
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-Single appearance properties per component
-Examples:
 
-button.bg
 
-card.text
+04\. INTELLECTUAL PROPERTY \& LICENSE
 
-5.4 Shared Structure Tokens
 
-Geometry reused across components
-Examples:
 
-control.height
+• Client Ownership: Upon full payment, the Client owns the specific values and exported files delivered (tokens, mappings, and platform code).
 
-control.padding.x
+• Provider Ownership: The Provider retains exclusive ownership of all internal logic, templates, scripts, and generation systems (“Axinite engine”).
 
-6. What Is Delivered
-6.1 Token System (Source of Truth)
+• License Grant: The Client receives a perpetual, worldwide, royalty-free license to use, modify, and distribute the delivered artifacts within their own products and organization.
 
-tokens.json
-Canonical, machine-readable token source
+• Restriction: The Client may not resell, sublicense, or commercialize the Axinite system, architecture, or methodology as a competing product or service.
 
-style-dictionary.config
-Configuration for platform transforms
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-6.2 Platform Runtime Output (One Only)
 
-Client must specify platform at order.
 
-Web: tokens.css (CSS custom properties)
+05\. CONFIDENTIALITY (MUTUAL)
 
-iOS: Tokens.swift (Swift constants)
 
-Android:
 
-Tokens.kt (Jetpack Compose), or
+By initiating the engagement, both parties agree to a mutual confidentiality obligation:
 
-colors.xml (Android Views)
 
-No cross-platform delivery in this tier.
 
-6.3 Reference & Documentation
+• The Provider will not disclose Client brand values, internal names, or source files.
 
-mapping-dictionary.md
-Exact 1:1 mapping from design styles to tokens
+• The Client will not disclose or reverse-engineer Axinite’s internal architecture, mappings, or system logic for third-party replication.
 
-integration-readme.md
-Step-by-step instructions for developers
 
-6.4 Verification Artifacts
 
-For each reference component:
+This obligation survives delivery.
 
-Figma instance using tokens only
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-Minimal code snippet demonstrating token usage
 
-These are verification artifacts, not production components.
 
-7. Quality Gate (Input Validation)
+06\. COMMERCIAL TERMS \& PAYMENT
 
-If required values are missing, ambiguous, or contradictory, a Quality Gate is triggered.
 
-Work pauses until resolved.
 
-Client may choose one option:
+• Currency: USD
 
-Provide missing values within 7 business days
+• Payment: 100% upfront, required to secure a production slot
 
-Purchase Cleanup Pack
+• Pricing: Fixed and disclosed before payment
 
-$600 one-time
+• Delivery: Digital delivery via versioned .zip archive
 
-Up to 30 corrected token values
+• Start Condition: Work begins only after payment has cleared
 
-Approve hourly remediation
 
-$100 / hour
 
-8. Stalled Project Policy
+Failure to complete payment results in no obligation to deliver.
 
-If inputs or approvals are not provided within 14 calendar days after a Quality Gate:
 
-Project is placed on hold
 
-Timeline pauses
+07\. ACCEPTANCE, WARRANTY \& CHANGE WINDOW
 
-Reactivation requires:
 
-Submission of missing inputs or
 
-$250 reactivation fee (plus any remediation)
+• The Deliverables are considered accepted upon delivery if they meet the documented integration outputs.
 
-9. Acceptance Criteria
+• A 14-day validation window is provided to confirm compatibility with the Client’s current design files.
 
-The engagement is considered complete when all of the following are true:
+• Changes to source designs after delivery are out of scope and may require a paid re-sync.
 
-tokens.json generates runtime output without errors
 
-All reference components render using tokens only
 
-Code snippets compile without syntax errors
+Deliverables are otherwise provided “as is.”
 
-Mapping document is reviewed and approved
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-No unresolved Quality Gate conditions remain
 
-10. Explicit Exclusions
 
-The following are not included:
+08\. LIABILITY LIMITATION
 
-Design cleanup or UX changes
 
-Dark mode or multi-theme support
 
-Variant-heavy or state-heavy tokenization
+• The Provider is not responsible for errors introduced during Client-side implementation.
 
-Full component libraries
+• Total liability is strictly limited to the amount paid for the specific engagement.
 
-App or site integration
+• No indirect, incidental, or consequential damages are assumed.
 
-Build tool configuration
 
-Cross-platform delivery
 
-Any expansion requires Tier 2 or custom scope.
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-11. Intended Buyer Fit
 
-Unitary Foundation is appropriate if:
 
-You already have a defined visual direction
+09\. DISPUTES \& GOVERNING FRAMEWORK
 
-You want deterministic design → code output
 
-You accept fixed limits and constraints
 
-It is not appropriate if:
+This is an international, digital-only service.
 
-You want design help or iteration
 
-You need multi-theme support
 
-You expect bespoke flexibility
+• Any disputes shall first be resolved informally via email.
 
-12. Next Step
+• Unresolved disputes are handled exclusively through the payment processor’s dispute resolution system (e.g., Stripe).
 
-If this scope fits your needs:
+• The recorded click-wrap consent, payment receipt, and delivery logs constitute binding evidence of agreement.
 
-→ Request Audit
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-The audit determines whether your inputs qualify for this scope or require preparation.
 
-End of Document
+
+10\. CONSENT \& ENFORCEMENT
+
+
+
+Agreement to these Terms is confirmed via explicit checkbox consent and payment authorization.
+
+This action constitutes a legally binding electronic agreement in accordance with applicable international e-commerce standards.
+
+
+
+End of Terms
+
+ADS-RE-001 — Axinite Design System Foundation
+

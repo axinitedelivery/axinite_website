@@ -125,49 +125,113 @@ window.openOverlay = async function (id, fileName = null) {
        GLOBAL INTERACTIONS
     -------------------------------- */
 
+(function () {
+  const buttons = document.querySelectorAll('.radius-toggle [data-scale]');
+  const previewSurface = document.querySelector('.preview-surface');
+  const codeOut = document.getElementById('token-debug') || document.getElementById('token-code');
+  const tokenLine = document.getElementById('token-line');
 
-window.toggleFigmaRequirement = function () {
-    const ndaChecked = document.getElementById("nda-required").checked;
-    const figmaInput = document.getElementById("figma-url");
-    const figmaStar = document.getElementById("figma-star");
+  if (!buttons.length) return;
 
-    // If NDA is required → Figma URL becomes optional
-    figmaInput.required = !ndaChecked;
+  // Map of semantic options (L2). These must already exist as CSS variables.
+  const SEMANTIC = {
+    sm: {
+      surface: '--radius-surface-sm',
+      control: '--radius-control-sm',
+      label: 'sm'
+    },
+    md: {
+      surface: '--radius-surface-md',
+      control: '--radius-control-md',
+      label: 'md'
+    },
+    lg: {
+      surface: '--radius-surface-lg',
+      control: '--radius-control-lg',
+      label: 'lg'
+    }
+  };
 
-    // Hide/show required asterisk if it exists
-    if (figmaStar) {
-        figmaStar.style.display = ndaChecked ? "none" : "inline";
+  /**
+   * Set the L3 policy variables on :root so the whole page or exported tokens respond.
+   * This is the authoritative action that demonstrates governance.
+   */
+  function setRadiusPolicy(size) {
+    const cfg = SEMANTIC[size];
+    if (!cfg) return;
+
+    // Update button UI state
+    buttons.forEach(b => {
+      const active = b.dataset.scale === size;
+      b.classList.toggle('is-active', active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+
+    // Optionally keep the demo preview-surface data attribute for local scoping or copy
+    if (previewSurface) previewSurface.setAttribute('data-radius', size);
+
+    // Set the L3 policy variables on :root
+    const root = document.documentElement;
+    // Policy tokens (active semantics)
+    root.style.setProperty('--radius-surface', `var(${cfg.surface})`);
+    root.style.setProperty('--radius-control', `var(${cfg.control})`);
+
+    // Optional explicit component bindings (L4). Not necessary if your CSS uses these aliases,
+    // but explicit assignment makes the demo and debugging clear.
+    root.style.setProperty('--card-radius', 'var(--radius-surface)');
+    root.style.setProperty('--input-radius', 'var(--radius-control)');
+    root.style.setProperty('--button-radius', 'var(--radius-control)');
+
+    // Update the human-readable token line if present
+    if (tokenLine) {
+      tokenLine.textContent = `radius.surface → ${cfg.label} · radius.control → ${cfg.label}`;
     }
 
-    // Update placeholder for clarity
-    figmaInput.placeholder = ndaChecked
-        ? "Optional until NDA is signed"
-        : "https://www.figma.com/file/xxxx";
+    // Update the code preview (CSS projection of the policy)
+    if (codeOut) {
+      codeOut.textContent = `:root {\n  /* Policy (active semantics) */\n  --radius-surface: var(${cfg.surface});\n  --radius-control: var(${cfg.control});\n\n  /* Component bindings */\n  --card-radius: var(--radius-surface);\n  --input-radius: var(--radius-control);\n  --button-radius: var(--radius-control);\n}`;
     }
+
+    // Accessibility: small SR hint
+    if (previewSurface) {
+      previewSurface.setAttribute('aria-live', 'polite');
+      setTimeout(() => previewSurface.removeAttribute('aria-live'), 600);
+    }
+  }
+
+  // Attach listeners
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const size = btn.getAttribute('data-scale');
+      setRadiusPolicy(size);
+    });
+  });
+
+  // Initialize from preview DOM or default md
+  const initial = (previewSurface && previewSurface.getAttribute('data-radius')) || 'md';
+  setRadiusPolicy(initial);
+
+})();
 
 
 /**
  * HANDLES AUDIT FORM SUBMISSION
  * Transition logic from Form -> Success Overlay
  */
-window.handleAuditSubmit = function (e) {
+window.handleSetupSubmit = function (e) {
     // 1. Prevent the browser from refreshing the page
     if (e && e.preventDefault) e.preventDefault();
 
-    // 2. Identify the user's intent (NDA vs. Direct Audit)
-    const ndaCheckbox = document.getElementById("nda-required");
-    const isNdaRequested = ndaCheckbox ? ndaCheckbox.checked : false;
 
     // 3. Select the appropriate deterministic message
-    const successMsg = isNdaRequested
-        ? "Protocol Initialized: NDA request received. Check your email for execution steps."
-        : "Data Received: Audit scheduled. Expect delivery within 48 business hours.";
+     const successMsg =   "Your request has been received and will be reviewed. You’ll receive next steps by email within 24–48 hours.";
 
     // 4. Inject the message into the success overlay
-    const messageNode = document.getElementById('success-message');
-    if (messageNode) {
-        messageNode.textContent = successMsg;
-    }
+        const messageNode = document.getElementById('success-message');
+        if (messageNode) {
+            messageNode.textContent = successMsg;
+        }
+
 
     /* 5. TRANSITION LOGIC 
        We do NOT call unlockScroll() here because we want the background 
@@ -175,7 +239,7 @@ window.handleAuditSubmit = function (e) {
     */
     
     // Hide the audit form overlay immediately
-    const auditOverlay = document.getElementById('audit-overlay');
+    const auditOverlay = document.getElementById('setup-overlay');
     if (auditOverlay) auditOverlay.style.display = 'none';
 
     // Open the success overlay
@@ -183,7 +247,7 @@ window.handleAuditSubmit = function (e) {
     window.openOverlay('success-overlay');
 
     // 6. Final Clean up
-    const form = document.getElementById('auditForm');
+    const form = document.getElementById('setupForm');
     if (form) form.reset();
     
     return false; // Extra safety for legacy browsers
@@ -207,3 +271,4 @@ window.handleAuditSubmit = function (e) {
     });
 
 })();
+

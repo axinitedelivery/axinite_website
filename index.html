@@ -41,7 +41,7 @@
         </div>
         </a>
           <div style="margin-left:auto; display:flex; gap:12px; align-items:center;">
-        <button onclick="openOverlay('audit-overlay')" class="btn-primary">Request Audit</button>
+        <button onclick="openOverlay('setup-overlay')" class="btn-primary">Start Setup</button>
           </div>
         </div>
     </nav>
@@ -53,12 +53,10 @@
         <h1 class="heading-xl">Turn design chaos into a system</h1>
         <p class="text-body-lg">Get a scalable system foundation from your existing UI<br>— aligned across code and design.</p>
         <div style="display: flex; flex-direction: column; gap: 16px; align-items: center; margin-top: 8px;">
-        <button onclick="openOverlay('audit-overlay')" class="btn-primary">Request Audit</button>
+        <button onclick="openOverlay('setup-overlay')" class="btn-primary">Start Setup</button>
         <a href="#anatomy" class="text-link">View the system anatomy</a>
         </div>
     </header>
-
-
 
     <!-- 2. The Problem -->
 <section id="the-problem" class="section-padding bg-subtle" role="region" aria-labelledby="problem-title">
@@ -66,7 +64,7 @@
     <header class="section-header">
       <span class="label-caps" id="problem-title">The Problem</span>
       <h2 class="heading-lg">Design decisions don’t survive production</h2>
-      <p class="text-body-md">They’re documented in design — but not enforced in production.</p>
+      <p class="text-body-md">Decisions are documented — enforcement is not.</p>
     </header>
 
     <div class="matrix-table" aria-describedby="problem-note">
@@ -129,14 +127,13 @@
   </div>
 </section>
 
-
     <!-- 3. Enforcement -->
 <section id="enforcement" class="section-padding">
   <div class="container">
     <header class="section-header">
       <span class="label-caps">Enforcement</span>
       <h2 class="heading-lg">Consistency enforced — not requested</h2>
-      <p class="text-body-md">Controls that prevent overrides, regressions, and one-off styling — so releases stay predictable.</p>
+      <p class="text-body-md">Controls that stop overrides and prevent regressions.</p>
     </header>
 
     <div class="sequential-container">
@@ -160,8 +157,8 @@
       <div class="sequential-step">
         <div>
           <h3 class="label">2. Token access rules</h3>
-          <div class="text-body-sm">Components can only use semantic tokens — primitives are locked.</div>
-          <p class="text-body-sm step-insight">Removes inline overrides and design drift in code.</p>
+          <div class="text-body-sm">Components may only consume semantic tokens — primitives are locked.</div>
+          <p class="text-body-sm step-insight">Removes inline overrides and code-level drift.</p>
         </div>
         <div class="visual-box">
           <div class="text-mono">Primitive: <code>#111111</code></div>
@@ -176,14 +173,14 @@
       <div class="sequential-step">
         <div>
           <h3 class="label">3. Component assembly</h3>
-          <div class="text-body-sm">Components are composed from tokens — no custom values inside components.</div>
+          <div class="text-body-sm">Components are assembled from component tokens — no custom values inside components.</div>
           <p class="text-body-sm step-insight">Finite variants only — no one-offs.</p>
         </div>
-          <div class="visual-box">
-            <div class="text-mono">Button = <code>size: space.control.md</code></div>
-            <div class="text-mono">Button = <code>padding: space.control.sm</code></div>
-            <div style="margin-top:8px;font-size:13px;color:var(--gray-subtle);">Impact: fewer hotfixes after releases</div>
-          </div>
+        <div class="visual-box">
+          <div class="text-mono">Button.size → <code>size.control</code></div>
+          <div class="text-mono">Button.padding → <code>space.control</code></div>
+          <div style="margin-top:8px;font-size:13px;color:var(--gray-subtle);">Impact: fewer hotfixes after releases</div>
+        </div>
       </div>
 
       <div class="sequential-divider"></div>
@@ -191,14 +188,14 @@
       <!-- 4 -->
       <div class="sequential-step">
         <div>
-          <h3 class="label">4. Mode & scale</h3>
-          <div class="text-body-sm">Modes and density propagate from tokens so light/dark and accessibility adjustments are automatic.</div>
-          <p class="text-body-sm step-insight">Prevents inconsistent mode behavior across screens.</p>
+          <h3 class="label">4. Modes & Policy</h3>
+          <div class="text-body-sm">Modes (policy) rebind semantic tokens — density, color scheme and platform mappings live here.</div>
+          <p class="text-body-sm step-insight">Policy changes map semantics to primitives (auditable and reversible).</p>
         </div>
         <div class="visual-box">
           <div class="text-mono">Token: <code>text.primary</code></div>
           <div class="text-mono">Light → <code>#111111</code> · Dark → <code>#FFFFFF</code></div>
-          <div style="margin-top:8px;font-size:13px;color:var(--gray-subtle);">Impact: fewer visual regressions when toggling modes</div>
+          <div style="margin-top:8px;font-size:13px;color:var(--gray-subtle);">Impact: consistent behavior across modes and platforms</div>
         </div>
       </div>
 
@@ -208,8 +205,8 @@
       <div class="sequential-step">
         <div>
           <h3 class="label">5. Change control</h3>
-          <div class="text-body-sm">Semantic changes require a review and are versioned; breaking changes are visible before release.</div>
-          <p class="text-body-sm step-insight">Allows safe evolution without silent regressions.</p>
+          <div class="text-body-sm">Semantic changes require review, versioning, and a visible changelog; breaking changes are gated.</div>
+          <p class="text-body-sm step-insight">Safe evolution with traceable history.</p>
         </div>
         <div class="visual-box">
           <div class="text-mono mono-success">Allowed: reviewed semantic change</div>
@@ -226,43 +223,55 @@
   <div class="container">
     <header class="section-header">
       <span class="label-caps">System anatomy</span>
-      <h2 id="anatomy-title" class="heading-lg">How the system prevents drift</h2>
-      <p class="text-body-md">Practical layers that turn scattered UI values into enforceable rules — reducing rework and bugs.</p>
+      <h2 id="anatomy-title" class="heading-lg">What the system actually delivers</h2>
+      <p class="text-body-md">Outcome-first: governance, consistency, and a single source of truth for design and code.</p>
     </header>
 
     <div class="anatomy-stack" role="list">
+      <!-- 1 -->
       <div class="anatomy-box" role="listitem">
-        <h3 class="label">Primitives</h3>
-        <div style="font-size:12px; color:var(--gray-subtle);">Raw values: colors, spacing, typography</div>
-        <div style="margin-top:10px;" class="text-mono">Example: #0A0A0A · 16px · Montserrat</div>
+        <h3 class="label">Global brand alignment</h3>
+        <div style="font-size:12px; color:var(--gray-subtle);">One change updates every platform instantly.</div>
+        <div style="margin-top:10px;" class="text-mono">System truth: <code>--unit-4: 4px</code> · <code>--unit-8: 8px</code></div>
       </div>
 
       <div class="anatomy-connector" aria-hidden="true"></div>
 
+      <!-- 2 -->
       <div class="anatomy-box" role="listitem">
-        <h3 class="label">Semantics</h3>
-        <div style="font-size:12px; color:var(--gray-subtle);">Roles built from primitives: text.primary, surface.action</div>
-        <div style="margin-top:10px;" class="text-mono">Example: color.text.primary = #0A0A0A</div>
+        <h3 class="label">Scalable design language</h3>
+        <div style="font-size:12px; color:var(--gray-subtle);">Curated token scales — no guessing sizes or names.</div>
+        <div style="margin-top:10px;" class="text-mono">System truth: <code>--radius-surface-md = var(--unit-8)</code></div>
       </div>
 
       <div class="anatomy-connector" aria-hidden="true"></div>
 
+      <!-- 3 -->
       <div class="anatomy-box" role="listitem">
-        <h3 class="label">Components</h3>
-        <div style="font-size:12px; color:var(--gray-subtle);">Assembled from semantic tokens, enforceable in code</div>
-        <div style="margin-top:10px;" class="text-mono">Example: Button uses color.text.primary + space.control.md</div>
+        <h3 class="label">Zero-meeting governance</h3>
+        <div style="font-size:12px; color:var(--gray-subtle);">Active bindings enforce brand rules without back-and-forth.</div>
+        <div style="margin-top:10px;" class="text-mono">System truth: <code>--radius-surface = var(--radius-surface-md)</code></div>
+      </div>
+
+      <div class="anatomy-connector" aria-hidden="true"></div>
+
+      <!-- 4 -->
+      <div class="anatomy-box" role="listitem">
+        <h3 class="label">Divergence-proof code</h3>
+        <div style="font-size:12px; color:var(--gray-subtle);">Components are incapable of drifting from the system.</div>
+        <div style="margin-top:10px;" class="text-mono">System truth: <code>--card-radius = var(--radius-surface)</code></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 5. Design -> Code -->
+    <!-- 5. Design -> Code -->
 <section id="design-code" class="section-padding">
   <div class="container">
     <header class="section-header">
       <span class="label-caps">Design → Code</span>
       <h2 class="heading-lg">Design decisions become enforceable in code</h2>
-      <p class="text-body-md">The same tokens drive design tools and production — no guesswork.</p>
+      <p class="text-body-md">Tokens driving design → production — no guesswork.</p>
     </header>
 
             <div class="source-diagram">
@@ -306,7 +315,7 @@
     <!-- small code example -->
       <div class="u-panel" style="margin-top:var(--gap-h);" class="u-panel" >
         <span class="label-caps">Token export (JSON → CSS)</span>
-        <pre style="font-family:var(--mono);font-size:12px;white-space:pre-wrap;margin:0;">
+        <pre class="code-panel">
 {
   "color": { "text": { "primary": "#0A0A0A" } },
   "space": { "control": { "md": "16px" } }
@@ -321,16 +330,81 @@
   </div>
 </section>
 
-  <!-- 7. Engagement -->
-<section id="engagement" class="section-padding bg-subtle" role="region" aria-labelledby="engagement-title">
+    <!-- 6. System Behavior -->
+<section id="behavior" class="section-padding bg-subtle" aria-labelledby="behavior-title">
+  <div class="container">
+    <header class="section-header">
+      <span class="label-caps">System Behavior</span>
+      <h2 id="behavior-title" class="heading-lg">One change propagates everywhere</h2>
+      <p class="text-body-md">Interactive: a single scale remaps component semantics instantly.</p>
+    </header>
+
+    <div class="two-column-grid">
+
+      <!-- LEFT: CONTROLS + CONTEXT -->
+
+      <div class="preview-control">
+        <div style="margin-top:8px;">
+          <div class="text-body-sm">Active Layer</div>
+          <div class="text-mono" style="margin-top:6px;color:var(--gray-subtle);">Policy — the single source of truth</div>
+        </div>
+
+        <!-- Control Bar -->
+        <div class="radius-toggle" style="display:flex; gap:8px; margin-top:16px;">
+          <button class="btn-secondary is-active" data-scale="sm" aria-pressed="true">sm</button>
+          <button class="btn-secondary" data-scale="md" aria-pressed="false">md</button>
+          <button class="btn-secondary" data-scale="lg" aria-pressed="false">lg</button>
+        </div>
+
+        <p class="text-body-sm" style="margin:12px 0;">
+          Click to change the active radius scale.
+        </p>
+
+        <!-- Under the Hood: Conceptual + CSS -->
+        <div class="code-panel">
+<pre><code id="token-code" aria-live="polite" aria-atomic="true">:root {
+  --radius-surface: var(--radius-surface-md);
+  --radius-control: var(--radius-control-sm);
+}</code></pre>
+        </div> <!-- code panel-->
+      </div> <!-- preview-control -->
+
+      <!-- RIGHT: LIVE PREVIEW (visual) -->
+      <div class="preview-surface" data-radius="sm" role="region" aria-label="Live preview surface">
+        <!-- Token line: shows active mapping in plain text -->
+        <div class="text-mono" style="margin-bottom:12px; color:var(--gray-subtle);" id="token-line">
+          radius.surface = var(--radius-surface-sm)
+        </div>
+
+        <div class="preview-card" style="max-width:420px;">
+          <div class="preview-field">
+            <input type="text" placeholder="Input field" aria-label="Sample input" />
+          </div>
+
+          <div style="margin-top:12px;">
+            <button class="preview-button">Primary action</button>
+          </div>
+        </div>
+
+        <p class="text-body-sm caption" style="margin-top:12px;">
+          All components resolve from the same scale.
+        </p>
+      </div>
+
+    </div> <!-- two-column-grid -->
+  </div> <!-- container -->
+</section>
+
+
+
+     <!-- 7. Engagement -->
+<section id="engagement" class="section-padding" role="region" aria-labelledby="engagement-title">
   <div class="container">
 
     <header class="section-header">
       <span class="label-caps" id="engagement-title">ENGAGEMENT</span>
       <h2 class="heading-lg">Scope & Commercial Terms</h2>
-      <p class="text-body-md">
-        What is delivered, what is required, and where responsibility begins and ends.
-      </p>
+      <p class="text-body-md">Deliverables, requirements, and boundaries of responsibility.</p>
     </header>
 
     <div class="flex-col" style="gap: var(--gap-h);">
@@ -371,13 +445,14 @@
               <li>Platform runtime output (CSS / Swift / Kotlin)</li>
               <li>Design → token → code mapping</li>
               <li>Integration README</li>
-              <li>5 reference components (verification only)</li>
+              <li>5 reference components (for integration & validation)</li>
             </ul>
           </div>
           <div class="u-panel">
             <span class="label-caps">Boundaries & Enforcement</span>
             <ul class="u-list--compact" style="margin-top: 0.5rem; font-size: 13px;">
               <li>Up to 120 total token values</li>
+              <li>(colors, spacing, typography, etc.)</li>
               <li>Missing inputs trigger pause</li>
               <li>Delivery pauses until resolved</li>
               <li>No design cleanup or UX changes</li>
@@ -402,16 +477,13 @@
   </div>
 </section>
 
-
-
-
-<!-- 6. Eligibility -->
+    <!-- 8. Eligibility -->
 <section id="eligibility" class="section-padding">
   <div class="container">
     <header class="section-header">
       <span class="label-caps">Eligibility</span>
       <h2 class="heading-lg">Built for teams where inconsistency is an operational problem</h2>
-      <p class="text-body-md">When visual drift increases engineering work, causes regressions, or slows releases.</p>
+      <p class="text-body-md">When visual drift raises engineering effort and product risk.</p>
     </header>
 
       <div class="u-panel">
@@ -425,12 +497,12 @@
     </div>
      <!-- clarification, not categorization -->
     <p class="text-body-sm caption">
-      <strong>Note:</strong> Works with existing UI.  
-      Teams without an existing UI can start with a Foundation setup.
+      <strong>Note:</strong>Both for teams with an existing UI and for teams starting from scratch.
     </p>
   </div>
 </section>
 
+     <!-- footer -->
 <footer class="footer bg-subtle">
     <div class="container">
         <div class="footer-grid">
@@ -449,12 +521,12 @@
                         <a href="" 
                         class="text-link link-file" 
                         onclick="openOverlay('readme-overlay', 'ads-integration-readme.md'); return false;">
-                        View Integration README [MD]
+                        View Integration README
                         </a>
                     </li>
                     <li>
                         <a href="" class="text-link link-file" onclick="openOverlay('readme-overlay', 'ads-commercial-terms.md'); return false;">
-                            View Commercial Terms [PDF]
+                            View Commercial Terms
                         </a>
                     </li>
                 </ul>
@@ -468,8 +540,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="" class="text-link" onclick="openOverlay('audit-overlay'); return false;" style="font-weight: 600; display: block; margin-top: 12px;">
-                                Initialize Audit
+                            <a href="" class="text-link" onclick="openOverlay('setup-overlay'); return false;" style="font-weight: 600; display: block; margin-top: 12px;">
+                                Start Setup
                             </a>
                         </li>
                     </ul>
@@ -489,7 +561,7 @@
 </footer>
 </main>
 
-
+     <!-- Overlays -->
 <div id="readme-overlay" class="overlay" tabindex="-1" data-focus-zone="overlay">
     <div class="overlay-content" role="dialog" aria-modal="true">
         <div class="overlay-header">
@@ -507,28 +579,27 @@
     </div>
 </div>
 
-<div id="audit-overlay" class="overlay">
+<div id="setup-overlay" class="overlay">
     <div class="overlay-content form-container">
         <div class="overlay-header">
-            <span class="overlay-label">Request Technical Audit</span>
+            <span class="overlay-label">Start Setup</span>
             <button onclick="closeActiveOverlay()" class="close-btn" aria-label="Close">&times;</button>
         </div>
         
         <div class="overlay-body">
             <div class="form-intro">
-                <p class="text-body-sm" style="padding-bottom: 16px;">SLA: Audit report generated and delivered within 48 business hours.</p>
             </div>
 
-            <form id="auditForm" onsubmit="handleAuditSubmit(event)">
+            <form id="setupForm" onsubmit="handleSetupSubmit(event)">
                 
                 <div class="form-group">
-                    <label class="form-label">Contact name <span class="required-star">*</span></label>
+                    <label class="form-label">Name <span class="required-star">*</span></label>
                     <input class="u-input" type="text" name="name" placeholder="A. Johnson" required>
-                    <span class="helper-text">Name used in the audit result.</span>
+                    <span class="helper-text">Primary contact for the system setup.</span>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Work email <span class="required-star">*</span></label>
+                    <label class="form-label">Email <span class="required-star">*</span></label>
 <input 
     class="u-input" 
     type="email" 
@@ -540,63 +611,38 @@
     pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
     title="Please enter a valid email address (e.g., name@company.com)"
 >
-                    <span class="helper-text">Audit results sent here. Use a business email if possible.</span>
-                    <div id="email-warning" class="validation-warning" style="display:none;">
-                        Business email preferred. If this is G-Suite/Company-managed, proceed.
-                        <br>
-                        <label style="display:inline; font-size: 11px;"><input type="checkbox" id="managed-email"> This is a company email</label>
-                    </div>
+                    <span class="helper-text">Setup confirmation and next steps are sent here</span>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Primary platform <span class="required-star">*</span></label>
+                    <label class="form-label">Primary platform<span class="required-star">*</span></label>
                     <div class="radio-group">
-                        <label class="radio-label"><input type="radio" name="platform" value="Web" required> Web</label>
-                        <label class="radio-label"><input type="radio" name="platform" value="iOS"> iOS</label>
-                        <label class="radio-label"><input type="radio" name="platform" value="Android"> Android</label>
+                        <label class="radio-label"><input type="radio" name="platform" value="Web" required>Web</label>
+                        <label class="radio-label"><input type="radio" name="platform" value="iOS">iOS</label>
+                        <label class="radio-label"><input type="radio" name="platform" value="Android">Android</label>
                     </div>
-                    <span class="helper-text">Foundation is priced per platform.</span>
+                    <span class="helper-text">Used to scope the system foundation.</span>
                 </div>
 
                 <div class="form-group">
-                    <label  class="form-label">Design source (Figma URL) <span id="figma-star" class="required-star">*</span></label>
+                    <label  class="form-label">Design source (Figma URL)</label>
                     <div class="gatekeeper-box">
-                        <input class="u-input" type="url" id="figma-url" name="figma_url" placeholder="https://www.figma.com/file/xxxx" required>
-                        <p class="gatekeeper-text">Direct Figma access enables accurate verification.</p>
+                        <input class="u-input" type="url" id="figma-url" name="figma_url" placeholder="https://www.figma.com/file/xxxx">
                     </div>
-                    <span class="helper-text">Optional if 'NDA Required' is checked.</span>
-                </div>
-
-                <div class="form-group checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="nda-required" name="nda_required" onchange="toggleFigmaRequirement()">
-                        I require an NDA before sharing design files.
-                    </label>
-                    <span class="helper-text">If checked, Figma URL becomes optional for initial submission.</span>
+                    <span class="helper-text"> Optional. Helps align the system with your existing patterns.</span>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Estimated token volume <span class="required-star">*</span></label>
-                    <div class="radio-group">
-                        <label class="radio-label"><input type="radio" name="volume" value="Under 120" required> Under 120</label>
-                        <label class="radio-label"><input type="radio" name="volume" value="120-300"> 120–300</label>
-                        <label class="radio-label"><input type="radio" name="volume" value="300+"> 300+</label>
-                    </div>
-                    <span class="helper-text">Foundation supports up to 120 token values.</span>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Desired outcome <span class="required-star">*</span></label>
+                    <label class="form-label">Requested service<span class="required-star">*</span></label>
                     <select name="outcome" required>
                         <option value="Foundation">Foundation (token delivery — $3,000)</option>
                         <option value="Cleanup">Cleanup Pack (design prep — $600)</option>
-                        <option value="Undecided">Undecided — want a recommendation</option>
                     </select>
                 </div>
 
                 <div class="form-group checkbox-group">
-                    <label class="checkbox-label"><input type="checkbox" required> I confirm I have the rights to share these files <span class="required-star">*</span></label>
-                    <label class="checkbox-label"><input type="checkbox" required> I accept this is a verification audit, not a delivery <span class="required-star">*</span></label>
+                    <label class="checkbox-label"><input type="checkbox" required>I confirm I have the rights to share these files<span class="required-star">*</span></label>
+                    <label class="checkbox-label"><input type="checkbox" required>I agree to share my information for the purpose of this setup request.<span class="required-star">*</span></label>
                 </div>
 
                 <div class="privacy-note">
@@ -610,7 +656,7 @@
         </div>
 
         <div class="overlay-footer">
-            <button type="submit" form="auditForm" class="btn-primary">Request Audit</button>
+            <button type="submit" form="setupForm" class="btn-primary">Start Setup</button>
             <button type="button" onclick="closeActiveOverlay()" class="btn-secondary">Cancel</button>
         </div>
     </div>
@@ -619,7 +665,7 @@
 <div id="success-overlay" class="overlay">
     <div class="overlay-content">
         <div class="overlay-header">
-            <span class="overlay-label">Protocol Initialized</span>
+            <span class="overlay-label">Setup Initialized</span>
         </div>
         <div class="overlay-body">
             <div style="margin-bottom: 24px;">
@@ -628,7 +674,7 @@
                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
             </div>
-            <p id="success-message" class="text-body-sm" style="line-height: 1.6;"></p>
+            <p id="success-message" class="text-body-sm" style="line-height: 1.6;"> "Your request has been received and will be reviewed.<br>you’ll receive next steps by email within 24–48 hours.";</p>
         </div>
         <div class="overlay-footer">
             <button type="button" onclick="closeActiveOverlay()" class="btn-primary">Acknowledge</button>
