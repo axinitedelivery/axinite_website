@@ -423,8 +423,6 @@ body.overlay-open main#main {
     border-radius: var(--radius-main);
 }
 
-.u-panel pre { background:#0f1620; color:#fff; padding:32px; border-radius: var(--radius-small); overflow:auto; }
-
 .hero-section .btn-primary {
     height: 48px;     /* Increased from 32px */
     padding: 0 32px;      /* Increased horizontal padding */
@@ -435,7 +433,9 @@ body.overlay-open main#main {
 .code-panel {
     background:#0f1620; color:#fff; padding:32px; border-radius: var(--radius-small); overflow:auto; 
 }
-
+#token-code {
+white-space: pre-wrap;
+}
 /* Buttons */
 .btn-primary {
     border: none;
@@ -839,9 +839,11 @@ transform: rotate(45deg) scale(1);
 .matrix-row { padding: 8px 16px; display: grid; align-items: start; text-align: left; }
 .sequential-step { padding: 16px; }
 .u-panel { padding: 16px; }
+.code-panel { padding: 16px; }
+.preview-surface { padding: 16px; }
+.preview-control { padding: 16px; }
 
 .matrix-header { display: none; }
-
 .matrix-table {
     background: transparent; /* Remove the grid lines */
     border: none;
