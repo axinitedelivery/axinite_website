@@ -103,6 +103,7 @@ Agreement to these Terms is confirmed via explicit checkbox consent and payment 
 This action constitutes a legally binding electronic agreement in accordance with applicable international e-commerce standards.
 
 End of Terms
-ADS-RE-001 — Axinite Design System Foundation
+ADS-RE-001 — Axinite Design System Infrastructure
+
 
 
