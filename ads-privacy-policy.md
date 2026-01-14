@@ -39,7 +39,7 @@ During an engagement, Axinite may access:
 • Visual system values (colors, spacing, typography, effects)
 • Client contact information required for delivery and communication
 
-Axinite explicitly does **not** access:
+Axinite explicitly does not access:
 
 • End-user or customer data
 • Product logic or backend systems
@@ -139,3 +139,4 @@ ________________________________________
 
 End of Terms
 ADS-RE-001 — Axinite Design System Foundation
+
