@@ -124,5 +124,6 @@ provider-email@example.com**
 ________________________________________
 
 End of Terms
-ADS-RE-001 — Axinite Design System Foundation
+ADS-RE-001 — Axinite Design System Infrastructure
+
 
