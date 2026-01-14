@@ -361,12 +361,14 @@
         </p>
 
         <!-- Under the Hood: Conceptual + CSS -->
-        <div class="code-panel">
-<pre><code id="token-code" aria-live="polite" aria-atomic="true">:root {
+        <pre class="code-panel">
+<code id="token-code" aria-live="polite" aria-atomic="true">
+  :root {
   --radius-surface: var(--radius-surface-md);
   --radius-control: var(--radius-control-sm);
-}</code></pre>
-        </div> <!-- code panel-->
+  }
+</code>
+        </pre> <!-- code panel-->
       </div> <!-- preview-control -->
 
       <!-- RIGHT: LIVE PREVIEW (visual) -->
@@ -394,8 +396,6 @@
     </div> <!-- two-column-grid -->
   </div> <!-- container -->
 </section>
-
-
 
      <!-- 7. Engagement -->
 <section id="engagement" class="section-padding" role="region" aria-labelledby="engagement-title">
@@ -594,23 +594,29 @@
                 
                 <div class="form-group">
                     <label class="form-label">Name <span class="required-star">*</span></label>
-                    <input class="u-input" type="text" name="name" placeholder="A. Johnson" required>
+                      <input
+                          class="u-input"
+                          type="text"
+                          name="name"
+                          placeholder="A. Johnson"
+                          required
+                      >
                     <span class="helper-text">Primary contact for the system setup.</span>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Email <span class="required-star">*</span></label>
-<input 
-    class="u-input" 
-    type="email" 
-    id="audit-email" 
-    name="email" 
-    placeholder="you@company.com" 
-    required 
-    onblur="validateBusinessEmail()"
-    pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
-    title="Please enter a valid email address (e.g., name@company.com)"
->
+                      <input 
+                          class="u-input" 
+                          type="email" 
+                          id="audit-email" 
+                          name="email" 
+                          placeholder="you@company.com" 
+                          required 
+                          onblur="validateBusinessEmail()"
+                          pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                          title="Please enter a valid email address (e.g., name@company.com)"
+                      >
                     <span class="helper-text">Setup confirmation and next steps are sent here</span>
                 </div>
 
@@ -641,8 +647,8 @@
                 </div>
 
                 <div class="form-group checkbox-group">
-                    <label class="checkbox-label"><input type="checkbox" required>I confirm I have the rights to share these files<span class="required-star">*</span></label>
-                    <label class="checkbox-label"><input type="checkbox" required>I agree to share my information for the purpose of this setup request.<span class="required-star">*</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="consent_files" required>I confirm I have the rights to share these files<span class="required-star">*</span></label>
+                    <label class="checkbox-label"><input type="checkbox" name="consent_data" required>I agree to share my information for the purpose of this setup request.<span class="required-star">*</span></label>
                 </div>
 
                 <div class="privacy-note">
