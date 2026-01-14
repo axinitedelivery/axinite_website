@@ -1,6 +1,6 @@
 SYSTEM GOVERNANCE & COMMERCIAL TERMS
 
-Service: Axinite Design Infrastructure
+Service: Axinite Design System Infrastructure
 Provider: Miki G. (independent operator)
 
 ________________________________________
@@ -104,4 +104,5 @@ This action constitutes a legally binding electronic agreement in accordance wit
 
 End of Terms
 ADS-RE-001 — Axinite Design System Foundation
+
 
